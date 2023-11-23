@@ -110,13 +110,17 @@ export default {
       height: 80%;
       margin-right: 15px;
     }
+    .header-title{
+      font-weight:bold;
+    }
+
     .outlogin{
       margin-left: 10px;
       cursor: pointer;
     }
     &-title {
       float: left;
-      font-size: 24px;
+      font-size: 30px;
     }
     &-right {
       float: right;

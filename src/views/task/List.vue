@@ -8,18 +8,18 @@
       </el-form>
       <el-table stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="Instance" label="Instance"></el-table-column>
-        <el-table-column prop="SearchFrom" label="SearchFrom"></el-table-column>
-        <el-table-column prop="FullCron" label="FullCron"></el-table-column>
         <el-table-column prop="Alias" label="Alias"></el-table-column>
+        <el-table-column prop="FullCron" label="FullCron"></el-table-column>
         <el-table-column prop="DeltaCron" label="DeltaCron"></el-table-column>
-        <el-table-column prop="IsVirtualPipe" label="IsVirtualPipe">
-          <template slot-scope="{ row }">
-            <div>{{ row.IsVirtualPipe }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="InstanceType" width="160px" label="InstanceType"></el-table-column>
         <el-table-column prop="ReadFrom" label="ReadFrom"></el-table-column>
         <el-table-column prop="WriteTo" label="WriteTo"></el-table-column>
+        <el-table-column prop="SearchFrom" label="SearchFrom"></el-table-column>
+        <el-table-column prop="InstanceType" width="160px" label="InstanceType"></el-table-column>
+        <el-table-column prop="IsVirtualPipe" label="IsVirtualPipe">
+            <template slot-scope="{ row }">
+              <div>{{ row.IsVirtualPipe }}</div>
+            </template>
+        </el-table-column>
         <el-table-column prop="OpenTrans" label="OpenTrans">
           <template slot-scope="{ row }">
             <div>{{ row.OpenTrans }}</div>
@@ -46,6 +46,8 @@
                   <el-dropdown-item @click.native="handleResumeFull(row)">恢复全量任务</el-dropdown-item>
                   <el-dropdown-item @click.native="handleRunFull(row)">立即运行全量任务</el-dropdown-item>
                   <el-dropdown-item @click.native="handleDelete(row)">删除任务</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleDeleteData(row)">删除任务数据</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleResetTask(row)">重置任务状态</el-dropdown-item>
                   <el-dropdown-item @click.native="handleReset(row)">重置断路器</el-dropdown-item>
                 </ul>
               </el-popover>
@@ -118,12 +120,12 @@ export default {
     handlePageIndex (num) {
       this.page.index = num
     },
-    handleReset (row) {
-      this.$confirm('是否重置该任务？', '提示', {
+    handleResetTask (row) {
+      this.$confirm('是否重置该任务状态？', '提示', {
         type: 'warning'
       }).then(() => {
         taskApi.efm_doaction({
-          ac: 'resetBreaker',
+          ac: 'resetInstanceState',
           instance: row.Instance
         }).then(res => {
           this.$notify({
@@ -134,6 +136,22 @@ export default {
         })
       })
     },
+    handleReset (row) {
+          this.$confirm('是否重置该任务断路器？', '提示', {
+            type: 'warning'
+          }).then(() => {
+            taskApi.efm_doaction({
+              ac: 'resetBreaker',
+              instance: row.Instance
+            }).then(res => {
+              this.$notify({
+                title: '成功',
+                message: '重置成功',
+                duration: 2000
+              })
+            })
+          })
+        },
     handleStatus (row) {
       this.dialogTitle = '任务状态'
       taskApi.efm_doaction({
@@ -164,12 +182,12 @@ export default {
         this.visible = true
       })
     },
-    handleDelete (row) {
-      this.$confirm('是否删除该任务？', '提示', {
+    handleDeleteData (row) {
+      this.$confirm('是否删除该任务数据？', '提示', {
         type: 'warning'
       }).then(() => {
         taskApi.efm_doaction({
-          ac: 'removeInstance',
+          ac: 'deleteInstanceData',
           instance: row.Instance
         }).then(res => {
           this.$notify({
@@ -180,6 +198,22 @@ export default {
         })
       })
     },
+    handleDelete (row) {
+        this.$confirm('是否删除该任务？', '提示', {
+            type: 'warning'
+          }).then(() => {
+            taskApi.efm_doaction({
+              ac: 'removeInstance',
+              instance: row.Instance
+            }).then(res => {
+              this.$notify({
+                title: '成功',
+                message: '删除成功',
+                duration: 2000
+              })
+            })
+          })
+        },
     handleRun (row) {
       taskApi.efm_doaction({
         ac: 'runNow',
