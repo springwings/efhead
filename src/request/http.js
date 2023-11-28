@@ -8,7 +8,7 @@ const messageErr = function (srt) {
     message: srt || '未知错误',
     type: 'error',
     showClose: true,
-    duration: 4000
+    duration: 15000
   })
 }
 

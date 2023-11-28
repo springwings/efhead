@@ -110,10 +110,6 @@ export default {
       height: 80%;
       margin-right: 15px;
     }
-    .header-title{
-      font-weight:bold;
-    }
-
     .outlogin{
       margin-left: 10px;
       cursor: pointer;

@@ -110,7 +110,7 @@ export default {
             title: '成功',
             message: '添加任务成功',
             type: 'success',
-            duration: 2000
+            duration: 6000
           })
           setTimeout(() => {
             this.$router.push('/taskList')

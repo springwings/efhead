@@ -131,7 +131,7 @@ export default {
           this.$notify({
             title: '成功',
             message: '重置成功',
-            duration: 2000
+            duration: 15000
           })
         })
       })
@@ -147,7 +147,7 @@ export default {
               this.$notify({
                 title: '成功',
                 message: '重置成功',
-                duration: 2000
+                duration: 15000
               })
             })
           })
@@ -193,7 +193,7 @@ export default {
           this.$notify({
             title: '成功',
             message: '删除成功',
-            duration: 2000
+            duration: 15000
           })
         })
       })
@@ -209,7 +209,7 @@ export default {
               this.$notify({
                 title: '成功',
                 message: '删除成功',
-                duration: 2000
+                duration: 15000
               })
             })
           })
@@ -224,7 +224,7 @@ export default {
           title: '成功',
           message: '运行增量任务成功',
           type: 'success',
-          duration: 2000
+          duration: 15000
         })
       })
     },
@@ -238,7 +238,7 @@ export default {
           title: '成功',
           message: '运行全量任务成功',
           type: 'success',
-          duration: 2000
+          duration: 15000
         })
       })
     },
@@ -252,7 +252,7 @@ export default {
           title: '成功',
           message: '恢复增量任务成功',
           type: 'success',
-          duration: 2000
+          duration: 15000
         })
       })
     },
@@ -266,7 +266,7 @@ export default {
           title: '成功',
           message: '恢复全量任务成功',
           type: 'success',
-          duration: 2000
+          duration: 15000
         })
       })
     },
@@ -280,7 +280,7 @@ export default {
           title: '成功',
           message: '停止增量任务成功',
           type: 'success',
-          duration: 2000
+          duration: 15000
         })
       })
     },
@@ -294,7 +294,7 @@ export default {
           title: '成功',
           message: '停止全量任务成功',
           type: 'success',
-          duration: 2000
+          duration: 15000
         })
       })
     },
