@@ -39,6 +39,7 @@
               <el-popover trigger="click">
                 <el-button type="text" slot="reference">管理</el-button>
                 <ul>
+                  <el-dropdown-item @click.native="handleReload(row)">任务重载</el-dropdown-item>
                   <el-dropdown-item @click.native="handleStop(row)">停止增量任务</el-dropdown-item>
                   <el-dropdown-item @click.native="handleResume(row)">恢复增量任务</el-dropdown-item>
                   <el-dropdown-item @click.native="handleRun(row)">立即运行增量任务</el-dropdown-item>
@@ -228,6 +229,21 @@ export default {
         })
       })
     },
+    handleReload (row) {
+       taskApi.efm_doaction({
+         ac: 'reloadinstance',
+         instance: row.Instance,
+         reset:'false',
+         runtype: '-1'
+       }).then(res => {
+         this.$notify({
+           title: '成功',
+           message: '任务重载成功',
+           type: 'success',
+           duration: 15000
+         })
+       })
+     },
     handleRunFull (row) {
       taskApi.efm_doaction({
         ac: 'runNow',

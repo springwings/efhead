@@ -15,7 +15,7 @@ const messageErr = function (srt) {
 const service = axios.create({
   withCredentials: true,
   baseURL: process.env.NODE_ENV === 'development' ? '/' : `${window.location.protocol}//${window.location.hostname}:8617`,
-  timeout: 10 * 1000 // 超时时间
+  timeout: 60 * 1000 // 超时时间
 })
 
 // 请求拦截器

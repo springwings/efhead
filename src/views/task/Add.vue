@@ -114,7 +114,7 @@ export default {
           })
           setTimeout(() => {
             this.$router.push('/taskList')
-          }, 1000)
+          }, 9000)
         }).finally(() => {
           this.loading = false
         })
