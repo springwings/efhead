@@ -60,61 +60,28 @@ export default {
           })),
           categories
         }
- 
-      const findRoots = () => {
-        const nodeIdsWithLinks = new Set(graph.links.map(link => link.source));
-        const rootNodes = graph.nodes.filter(node => !nodeIdsWithLinks.has(node.id));
-        return rootNodes;
-      };
- 
-      const buildTree = (parentId) => {
-        const parentNode = graph.nodes.find(node => node.id === parentId);
-        if (!parentNode) return null;
-
-        const childrenLinks = graph.links.filter(link => link.target === parentId);
-        const childrenNodes = childrenLinks.map(link => buildTree(link.source)).filter(Boolean);
-
-        return {
-          name: parentNode.name,
-          id: parentNode.id,
-          symbolSize: parentNode.symbolSize,
-          category: parentNode.category,
-          children: childrenNodes
-        };
-      };
- 
-    const roots = findRoots(); 
-	const treeData = {
-	  name: 'ROOT',
-	  id: 'ROOT',  
-	  symbolSize: 10,  
-	  category: 'ROOT', 
-	  children: roots.map(root => buildTree(root.id)).filter(Boolean)
-	};
-
-    console.log(treeData)
         this.$nextTick(() => {
-          this.drawRelation(treeData,graph)
+          this.drawRelation(graph)
         })
       })
     },
-    drawRelation (treeData,graph) {
+    drawRelation (graph) {
       const option = {
         legend: [{ data: graph.categories.map(item => item.name) }],
         animationDuration: 1500,
         animationEasingUpdate: 'quinticInOut',
         series: [
           {
-            type: 'tree',
-            data: [treeData],
+            type: 'graph',
+            layout: 'circular',
+            data: graph.nodes,
+            links: graph.links,
             categories: graph.categories,
             roam: true,
-			expandAndCollapse: true,
             edgeSymbol: ['arrow'],
             edgeLabel: {
               fontSize: 14
             },
-            symbolSize: 20, 
             label: {
               show: true,
               position: 'right',
@@ -126,7 +93,9 @@ export default {
                 width: 2
               }
             },
-
+            // labelLayout: {
+            //   hideOverlap: false
+            // },
             scaleLimit: {
               min: 0.4,
               max: 2

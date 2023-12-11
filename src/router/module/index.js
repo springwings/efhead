@@ -4,8 +4,8 @@ const TestRoutes = [
     name: 'taskList',
     component: () => import('views/task/List.vue'),
     meta: {
-      title: '任务列表',
-      icon: 'el-icon-s-grid'
+      title: '任务管理',
+      icon: 'el-icon-files'
     }
   },
   {
@@ -14,25 +14,7 @@ const TestRoutes = [
     component: () => import('views/relation/Index.vue'),
     meta: {
       title: '任务关系图',
-      icon: 'el-icon-pie-chart'
-    }
-  },
-  {
-    path: '/clusterStatus',
-    name: '',
-    component: () => import('views/cluster/Status.vue'),
-    meta: {
-      title: '集群状态',
-      icon: 'el-icon-c-scale-to-original'
-    }
-  },
-  {
-    path: '/resourcesManage',
-    name: '',
-    component: () => import('views/resources/Manage.vue'),
-    meta: {
-      title: '资源管理',
-      icon: 'el-icon-setting'
+      icon: 'el-icon-data-line'
     }
   },
   {
@@ -41,7 +23,43 @@ const TestRoutes = [
     component: () => import('views/task/Add.vue'),
     meta: {
       title: '添加任务',
-      icon: 'el-icon-document-add'
+      icon: 'el-icon-folder-add'
+    }
+  },
+  {
+    path: '/clusterMange',
+    name: '',
+    component: () => import('views/cluster/Manage.vue'),
+    meta: {
+      title: '集群状态',
+      icon: 'el-icon-odometer'
+    }
+  },
+  {
+    path: '/clusterStatus',
+    name: '',
+    component: () => import('views/cluster/Status.vue'),
+    meta: {
+      title: '集群管理',
+      icon: 'el-icon-office-building'
+    }
+  },
+  {
+    path: '/resourcesManage',
+    name: '',
+    component: () => import('views/resources/Manage.vue'),
+    meta: {
+      title: '资源管理',
+      icon: 'el-icon-s-grid'
+    }
+  },
+  {
+    path: '/systemManage',
+    name: '',
+    component: () => import('views/system/Manage.vue'),
+    meta: {
+      title: '系统管理',
+      icon: 'el-icon-setting'
     }
   }
 ]
