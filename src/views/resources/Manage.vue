@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import taskApi from '@/request/api/task'
+import basicApi from '@/request/api/basic'
 import { Base64 } from '@/utils/Base64'
 
 export default {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     getXML () {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'getResource'
       }).then(res => {
         let data = res.response.datas
@@ -40,7 +40,7 @@ export default {
     },
     handleEdit () {
       let base64 = new Base64()
-      taskApi.efm_doaction_post({
+      basicApi.efm_doaction_post({
         ac: 'updateResource',
         content: base64.encode(this.code)
       }).then(res => {

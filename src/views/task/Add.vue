@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import taskApi from '@/request/api/task'
+import basicApi from '@/request/api/basic'
 import { Base64 } from '@/utils/Base64'
 
 export default {
@@ -105,7 +105,7 @@ export default {
           return sum + num
         })
         data.content = base64.encode(data.content)
-        taskApi.efm_doaction_post(data).then(res => {
+        basicApi.efm_doaction_post(data).then(res => {
           this.$notify({
             title: '成功',
             message: '添加任务成功',

@@ -195,7 +195,12 @@ button {
 }
 
 .key {
-    color: #8812A8;
+    font-weight: bold;
+    width: 220px;
+}
+
+.key2 {
+    width: 220px;
 }
 
 .string {

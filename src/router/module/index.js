@@ -27,21 +27,12 @@ const TestRoutes = [
     }
   },
   {
-    path: '/clusterMange',
-    name: '',
-    component: () => import('views/cluster/Manage.vue'),
-    meta: {
-      title: '集群状态',
-      icon: 'el-icon-odometer'
-    }
-  },
-  {
-    path: '/clusterStatus',
+    path: '/clusterManage',
     name: '',
     component: () => import('views/cluster/Status.vue'),
     meta: {
       title: '集群管理',
-      icon: 'el-icon-office-building'
+      icon: 'el-icon-odometer'
     }
   },
   {

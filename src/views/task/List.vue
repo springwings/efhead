@@ -7,7 +7,7 @@
         <el-button type="primary" @click="handleSearch">搜索</el-button>
       </el-form>
       <el-table stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
-        <el-table-column prop="Instance" label="Instance"></el-table-column>
+        <el-table-column prop="Instance" label="Instance" :min-width="150"></el-table-column>
         <el-table-column prop="Alias" label="Alias"></el-table-column>
         <el-table-column prop="FullCron" label="FullCron"></el-table-column>
         <el-table-column prop="DeltaCron" label="DeltaCron"></el-table-column>
@@ -17,15 +17,17 @@
         <el-table-column prop="InstanceType" width="160px" label="InstanceType"></el-table-column>
         <el-table-column prop="IsVirtualPipe" label="IsVirtualPipe">
             <template slot-scope="{ row }">
-              <div>{{ row.IsVirtualPipe }}</div>
+              <i v-if="row.IsVirtualPipe === true" class="el-button--success is-circle">{{ row.IsVirtualPipe }}</i>
+              <i v-else class="el-button--info is-circle">{{ row.IsVirtualPipe }}</i>
             </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="OpenTrans">
           <template slot-scope="{ row }">
-            <div>{{ row.OpenTrans }}</div>
+            <i v-if="row.OpenTrans === true" class="el-button--success is-circle"> {{row.OpenTrans}} </i>
+            <i v-else class="el-button--info is-circle"> {{row.OpenTrans}} </i>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="">
+        <el-table-column prop="Manage" label="Manage">
           <template slot-scope="{ row }">
             <div class="flex flex-around">
               <el-popover trigger="click">
@@ -82,7 +84,7 @@
 </template>
 
 <script>
-import taskApi from '@/request/api/task'
+import basicApi from '@/request/api/basic'
 
 export default {
   data () {
@@ -125,7 +127,7 @@ export default {
       this.$confirm('是否重置该任务状态？', '提示', {
         type: 'warning'
       }).then(() => {
-        taskApi.efm_doaction({
+        basicApi.efm_doaction({
           ac: 'resetInstanceState',
           instance: row.Instance
         }).then(res => {
@@ -141,7 +143,7 @@ export default {
           this.$confirm('是否重置该任务断路器？', '提示', {
             type: 'warning'
           }).then(() => {
-            taskApi.efm_doaction({
+            basicApi.efm_doaction({
               ac: 'resetBreaker',
               instance: row.Instance
             }).then(res => {
@@ -155,7 +157,7 @@ export default {
         },
     handleStatus (row) {
       this.dialogTitle = '任务状态'
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
       }).then(res => {
@@ -169,7 +171,7 @@ export default {
     },
     handleDetail (row) {
       this.dialogTitle = '任务信息'
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
       }).then(res => {
@@ -187,7 +189,7 @@ export default {
       this.$confirm('是否删除该任务数据？', '提示', {
         type: 'warning'
       }).then(() => {
-        taskApi.efm_doaction({
+        basicApi.efm_doaction({
           ac: 'deleteInstanceData',
           instance: row.Instance
         }).then(res => {
@@ -203,7 +205,7 @@ export default {
         this.$confirm('是否删除该任务？', '提示', {
             type: 'warning'
           }).then(() => {
-            taskApi.efm_doaction({
+          basicApi.efm_doaction({
               ac: 'removeInstance',
               instance: row.Instance
             }).then(res => {
@@ -216,7 +218,7 @@ export default {
           })
         },
     handleRun (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'runNow',
         instance: row.Instance,
         jobtype: 'increment'
@@ -230,7 +232,7 @@ export default {
       })
     },
     handleReload (row) {
-       taskApi.efm_doaction({
+      basicApi.efm_doaction({
          ac: 'reloadinstance',
          instance: row.Instance,
          reset:'false',
@@ -245,7 +247,7 @@ export default {
        })
      },
     handleRunFull (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'runNow',
         instance: row.Instance,
         jobtype: 'full'
@@ -259,7 +261,7 @@ export default {
       })
     },
     handleResume (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'resumeInstance',
         instance: row.Instance,
         type: 'increment'
@@ -273,7 +275,7 @@ export default {
       })
     },
     handleResumeFull (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'resumeInstance',
         instance: row.Instance,
         type: 'full'
@@ -287,7 +289,7 @@ export default {
       })
     },
     handleStop (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'stopInstance',
         instance: row.Instance,
         type: 'increment'
@@ -301,7 +303,7 @@ export default {
       })
     },
     handleStopFull (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'stopInstance',
         instance: row.Instance,
         type: 'full'
@@ -328,7 +330,7 @@ export default {
       this.page.total = data.length
     },
     handleConfig (row) {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'getInstanceXml',
         instance: row.Instance
       }).then(res => {
@@ -338,7 +340,7 @@ export default {
       })
     },
     getTaskList () {
-      taskApi.efm_doaction({
+      basicApi.efm_doaction({
         ac: 'getinstances'
       }).then(res => {
         let data = []

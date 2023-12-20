@@ -1,52 +1,69 @@
 <template>
     <el-card>
-    <div id="view_control" style="font-size:12px;position:relative;top:30px;left:30px;width:180px;min-height:60px;">
-    显示方式: <a @click="drawChart('tree')">树图</a> <a @click="drawChart('circle')">环形图</a><br>
-      <div id="tree_view" style="display:none"><em class="color-block">></em>箭头方向表示数据流向<br>
-      <em class="color-block" style="background:#999"></em>灰色表示是孤立节点<br>
-      <em class="color-block" style="background:#16ccb6"></em>深蓝色表示是结束节点
-       <em class="color-block" style="background:#ff6e00"></em>橙色表示节点非健康状态<br></div>
+    <div id="view_control" style="z-index:9999;font-size:12px;position:relative;top:30px;left:30px;width:300px;min-height:55px;">
+     <div style="float:left">
+     <a class="el-button el-button--success is-plain" @click="drawChart('circle')">环形图</a><br>
+     <a class="el-button el-button--primary is-plain" @click="drawChart('tree')">树形图</a>
+     </div>
+        <div id="tree_view" style="display:none;float:left;margin:10px 0 0 10px ">
+           <i class="el-icon-caret-right"></i> 箭头方向表示数据流向<br>
+          <em class="color-block" style="background:#999"></em> 灰色表示是孤立节点<br>
+          <em class="color-block" style="background:#16ccb6"></em> 深蓝色表示是结束节点<br>
+          <em class="color-block" style="background:#ff6e00"></em> 橙色表示节点非健康状态
+        </div>
+        <div id="circle_view" style="display:none;float:left;margin:10px 0 0 10px ">
+          <i class="el-icon-caret-right"></i> 箭头方向表示数据流向<br>
+          <i class="el-icon-minus"></i> 实线表示建立连接<br>
+          <i class="el-icon-more"></i> 虚线表示未建立连接<br>
+          <i class="el-icon-star-on"></i> 线上数据表示数据处理量
+        </div>
     </div>
-     <div id="relation" v-loading="show"></div>
+     <div id="relation" style="min-height:550px;" v-loading="show"></div>
     </el-card>
 </template>
 
 <script>
 import * as echarts from 'echarts'
-import taskApi from '@/request/api/task'
+import basicApi from '@/request/api/basic'
 
 export default {
     data () {
         return {
-          showLoading: false
+
         }
     },
     mounted () {
        this.chart = echarts.init(document.getElementById('relation'))
 		   this.drawChart('circle')
     },
-    methods: {
-	drawChart(type){
+    beforeDestroy() {
       clearInterval(this.interval_ins1);
       clearInterval(this.interval_ins2);
-		  switch (type){
-			case 'tree':
-			  this.scheduletree(this.chart);
-        document.getElementById('tree_view').style.display = 'block';
-			  break;
-			case 'circle':
-			  document.getElementById('tree_view').style.display = 'none';
-			  this.schedulecircle(this.chart);
-			  break;
-			default:
-			  break;
-       }
+    },
+    methods: {
+      drawChart(type){
+        clearInterval(this.interval_ins1);
+        clearInterval(this.interval_ins2);
+        switch (type){
+        case 'tree':
+          this.scheduletree(this.chart);
+          document.getElementById('tree_view').style.display = 'block';
+          document.getElementById('circle_view').style.display = 'none';
+          break;
+        case 'circle':
+          document.getElementById('tree_view').style.display = 'none';
+          document.getElementById('circle_view').style.display = 'block';
+          this.schedulecircle(this.chart);
+          break;
+        default:
+          break;
+         }
      },
     schedulecircle(chart){
-            this.interval_ins1 = setInterval(()=>{this.handlecircle(chart)},1500)
+            this.interval_ins1 = setInterval(()=>{this.handlecircle(chart)},2000)
         },
       handlecircle (chart) {
-            taskApi.efm_doaction({
+        basicApi.efm_doaction({
                 ac: 'instanceflowgraph'
             }).then(res => {
                 const data = res.response.datas
@@ -137,10 +154,10 @@ export default {
             chart.setOption(option)
         },
         scheduletree(chart){
-            this.interval_ins2 = setInterval(()=>{this.handletree(chart)},1500)
+            this.interval_ins2 = setInterval(()=>{this.handletree(chart)},2000)
         },
       handletree (chart) {
-            taskApi.efm_doaction({
+        basicApi.efm_doaction({
                 ac: 'instanceflowgraph'
             }).then(res => {
                 const data = res.response.datas
@@ -293,6 +310,5 @@ export default {
     height: 100%;
 }
 .color-block {width:10px;height:10px;display: inline-block;margin-right:2px;font-size:16px;font-weight:bold;color:#197700}
-#view_control a{width:50px;height:25px;text-align:center;line-height:25px;display: inline-block;margin: 5px auto 5px 5px; background-color: #666;
-        color: white;border: #999;cursor:pointer;}
+#view_control a{display: inline-block;margin: 5px auto 5px 5px; }
 </style>
