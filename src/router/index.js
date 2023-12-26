@@ -11,7 +11,7 @@ const routes = [
   { path: '*', redirect: '/404' },
   {
     path: '/',
-    redirect: '/taskList'
+    redirect: '/dashboard'
   },
   {
     path: '/',

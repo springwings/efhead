@@ -32,7 +32,7 @@ export default {
   methods: {
     getXML () {
       basicApi.efm_doaction({
-        ac: 'getResource'
+        ac: 'getResourcexml'
       }).then(res => {
         let data = res.response.datas
         this.code = typeof data === 'string' ? data : ''

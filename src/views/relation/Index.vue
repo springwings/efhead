@@ -1,6 +1,6 @@
 <template>
-    <el-card>
-    <div id="view_control" style="z-index:9999;font-size:12px;position:relative;top:30px;left:30px;width:300px;min-height:55px;">
+    <el-card >
+    <div v-loading="loading" id="view_control" style="z-index:9999;font-size:12px;position:relative;top:30px;left:30px;width:300px;min-height:55px;">
      <div style="float:left">
      <a class="el-button el-button--success is-plain" @click="drawChart('circle')">环形图</a><br>
      <a class="el-button el-button--primary is-plain" @click="drawChart('tree')">树形图</a>
@@ -18,7 +18,7 @@
           <i class="el-icon-star-on"></i> 线上数据表示数据处理量
         </div>
     </div>
-     <div id="relation" style="min-height:550px;" v-loading="show"></div>
+     <div id="relation" style="min-height:550px;" v-loading="loading"></div>
     </el-card>
 </template>
 
@@ -29,7 +29,7 @@ import basicApi from '@/request/api/basic'
 export default {
     data () {
         return {
-
+          loading: true
         }
     },
     mounted () {
@@ -42,6 +42,7 @@ export default {
     },
     methods: {
       drawChart(type){
+        this.loading = true
         clearInterval(this.interval_ins1);
         clearInterval(this.interval_ins2);
         switch (type){
@@ -58,9 +59,11 @@ export default {
         default:
           break;
          }
+        this.loading = false
      },
     schedulecircle(chart){
-            this.interval_ins1 = setInterval(()=>{this.handlecircle(chart)},2000)
+            this.handlecircle(chart)
+            this.interval_ins1 = setInterval(()=>{this.handlecircle(chart)},3000)
         },
       handlecircle (chart) {
         basicApi.efm_doaction({
@@ -154,7 +157,8 @@ export default {
             chart.setOption(option)
         },
         scheduletree(chart){
-            this.interval_ins2 = setInterval(()=>{this.handletree(chart)},2000)
+            this.handletree(chart)
+            this.interval_ins2 = setInterval(()=>{this.handletree(chart)},3000)
         },
       handletree (chart) {
         basicApi.efm_doaction({

@@ -1,5 +1,14 @@
 const TestRoutes = [
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('views/dashboard/Index.vue'),
+    meta: {
+      title: '控制面板',
+      icon: 'el-icon-data-analysis'
+    }
+  },
+  {
     path: '/taskList',
     name: 'taskList',
     component: () => import('views/task/List.vue'),
@@ -13,7 +22,7 @@ const TestRoutes = [
     name: 'relation',
     component: () => import('views/relation/Index.vue'),
     meta: {
-      title: '任务关系图',
+      title: '任务监控',
       icon: 'el-icon-data-line'
     }
   },
@@ -36,11 +45,20 @@ const TestRoutes = [
     }
   },
   {
+    path: '/resourcesStatus',
+    name: '',
+    component: () => import('views/resources/Status.vue'),
+    meta: {
+      title: '资源监控',
+      icon: 'el-icon-s-management'
+    }
+  },
+  {
     path: '/resourcesManage',
     name: '',
     component: () => import('views/resources/Manage.vue'),
     meta: {
-      title: '资源管理',
+      title: '资源配置',
       icon: 'el-icon-s-grid'
     }
   },

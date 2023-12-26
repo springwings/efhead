@@ -6,28 +6,33 @@
         </el-form-item>
         <el-button type="primary" @click="handleSearch">搜索</el-button>
       </el-form>
-      <el-table stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
-        <el-table-column prop="Instance" label="Instance" :min-width="150"></el-table-column>
-        <el-table-column prop="Alias" label="Alias"></el-table-column>
-        <el-table-column prop="FullCron" label="FullCron"></el-table-column>
-        <el-table-column prop="DeltaCron" label="DeltaCron"></el-table-column>
-        <el-table-column prop="ReadFrom" label="ReadFrom"></el-table-column>
-        <el-table-column prop="WriteTo" label="WriteTo"></el-table-column>
-        <el-table-column prop="SearchFrom" label="SearchFrom"></el-table-column>
-        <el-table-column prop="InstanceType" width="160px" label="InstanceType"></el-table-column>
-        <el-table-column prop="IsVirtualPipe" label="IsVirtualPipe">
+      <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
+        <el-table-column prop="Instance" label="实例名称" :min-width="150"></el-table-column>
+        <el-table-column prop="Alias" label="实例别名"></el-table-column>
+        <el-table-column prop="FullCron" label="全量定时"></el-table-column>
+        <el-table-column prop="DeltaCron" label="增量定时"></el-table-column>
+        <el-table-column prop="ReadFrom" label="读取端"></el-table-column>
+        <el-table-column prop="WriteTo" label="写入端"></el-table-column>
+        <el-table-column prop="SearchFrom" label="搜索端"></el-table-column>
+        <el-table-column prop="IsVirtualPipe" label="虚任务">
             <template slot-scope="{ row }">
               <i v-if="row.IsVirtualPipe === true" class="el-button--success is-circle">{{ row.IsVirtualPipe }}</i>
-              <i v-else class="el-button--info is-circle">{{ row.IsVirtualPipe }}</i>
+              <i v-else class="el-button--info is-circle padblock">{{ row.IsVirtualPipe }}</i>
             </template>
         </el-table-column>
-        <el-table-column prop="OpenTrans" label="OpenTrans">
+        <el-table-column prop="OpenTrans" label="读写开启">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenTrans === true" class="el-button--success is-circle"> {{row.OpenTrans}} </i>
-            <i v-else class="el-button--info is-circle"> {{row.OpenTrans}} </i>
+            <i v-if="row.OpenTrans === true" class="el-button--success is-circle padblock"> {{row.OpenTrans}} </i>
+            <i v-else class="el-button--info is-circle padblock"> {{row.OpenTrans}} </i>
           </template>
         </el-table-column>
-        <el-table-column prop="Manage" label="Manage">
+        <el-table-column prop="RunState" label="健康状态">
+            <template slot-scope="{ row }">
+              <i v-if="row.RunState === true" class="el-button--success is-circle padblock">{{ row.RunState }}</i>
+            <i v-else class="el-button--info is-circle padblock">{{ row.RunState }}</i>
+            </template>
+        </el-table-column>
+        <el-table-column prop="Manage" label="实例管理">
           <template slot-scope="{ row }">
             <div class="flex flex-around">
               <el-popover trigger="click">
@@ -112,7 +117,8 @@ export default {
         total: 0
       },
       detail: '',
-      dialogTitle: ''
+      dialogTitle: '',
+      loading: true
     }
   },
   methods: {
@@ -350,6 +356,7 @@ export default {
         this.page.total = data.length
         this.tableData = Object.assign([], data)
         this.originData = Object.assign([], data)
+        this.loading = false
       })
     },
     syntaxHighlight (json) {
@@ -393,5 +400,8 @@ export default {
   background: white;
   padding: 22px 50px 0 50px;
   margin-bottom: 15px;
+}
+.padblock{
+  padding:2px 5px;
 }
 </style>

@@ -50,18 +50,24 @@
             <td class="boolean">{{ result.DISTRIBUTE_RUN }}</td>
           </tr>
           <tr>
-            <td class="key">CPU</td>
-            <td class="number">{{ result.CPU }}</td>
-          </tr>
-          <tr>
-            <td class="key">MEMORY</td>
+            <td class="key">MEMORY_USAGE</td>
             <td class="number">
               <el-progress
-                v-if="result.MEMORY"
-                :percentage="result.MEMORY"
-                :class="progressStatus(result.MEMORY)"
+                v-if="result.MEMORY_USAGE"
+                :percentage="result.MEMORY_USAGE"
+                :class="progressStatus(result.MEMORY_USAGE)"
               ></el-progress>
             </td>
+          </tr>
+          <tr>
+              <td class="key">CPU_USAGE</td>
+                <td class="number">
+                <el-progress
+                v-if="result.CPU_USAGE"
+                :percentage="result.CPU_USAGE"
+                :class="progressStatus(result.CPU_USAGE)"
+              ></el-progress>
+              </td>
           </tr>
           <tr>
             <td class="key">SERVICE_LEVEL</td>
@@ -75,9 +81,9 @@
           <tr>
             <td class="key">Node Manage</td>
               <td class="number">
-                <a v-on:click="handleNode(result.NODE_ID,'restartNode')" type="button" class="el-button el-button--success">Restart Node</a>
-                <a v-on:click="handleCluster('restartCluster')" type="button" class="el-button el-button--primary">Restart Cluster</a>
-                <a v-on:click="handleCluster('stopCluster')" type="button" class="el-button el-button--info">Stop Cluster</a>
+                <a v-on:click="handleNode(result.NODE_ID,'restartNode')" type="button" class="el-button el-button--success">重启节点</a>
+                <a v-on:click="handleCluster('restartCluster')" type="button" class="el-button el-button--primary">重启集群</a>
+                <a v-on:click="handleCluster('stopCluster')" type="button" class="el-button el-button--info">停止集群</a>
               </td>
           </tr>
           <tr v-if="this.result.SLAVES && Object.keys(this.result.SLAVES).length > 0" style="background:#cdcdcd;text-align:center;font-weight:bold"><td colspan="2">SLAVES</td></tr>
@@ -103,18 +109,24 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="key2">MEMORY</td>
+                    <td class="key2">MEMORY_USAGE</td>
                     <td class="number">
                       <el-progress
-                        v-if="obj.MEMORY"
-                        :percentage="obj.MEMORY"
-                        :class="progressStatus(obj.MEMORY)"
+                        v-if="obj.MEMORY_USAGE"
+                        :percentage="obj.MEMORY_USAGE"
+                        :class="progressStatus(obj.MEMORY_USAGE)"
                       ></el-progress>
                     </td>
                   </tr>
                   <tr>
-                    <td class="key2">CPU</td>
-                    <td class="number">{{ obj.CPU }}</td>
+                    <td class="key2">CPU_USAGE</td>
+                    <td class="number">
+                          <el-progress
+                           v-if="obj.CPU_USAGE"
+                          :percentage="obj.CPU_USAGE"
+                        :class="progressStatus(obj.CPU_USAGE)"
+                        ></el-progress>
+                     </td>
                   </tr>
                   <tr>
                     <td class="key2">THREAD_POOL_SIZE</td>
@@ -133,8 +145,8 @@
                   <tr>
                      <td class="key2">Node Manage</td>
                      <td class="boolean">
-                      <a type="button" v-on:click="handleNode(obj.NODE_ID,'restartNode')" class="el-button el-button--success is-round">Restart</a>
-                      <a type="button" v-on:click="handleNode(obj.NODE_ID,'stopNode')" class="el-button el-button--info is-round">Stop</a>
+                      <a type="button" v-on:click="handleNode(obj.NODE_ID,'restartNode')" class="el-button el-button--success is-round">重启</a>
+                      <a type="button" v-on:click="handleNode(obj.NODE_ID,'stopNode')" class="el-button el-button--info is-round">停止</a>
                     </td>
                   </tr>
                 </td>
@@ -157,9 +169,9 @@ export default {
   },
   methods: {
     progressStatus (data) {
-      if (data >= 80) {
+      if (data >= 90) {
         return 'exception'
-      } else if (data >= 50) {
+      } else if (data >= 75) {
         return 'warning'
       } else {
         return 'success'
