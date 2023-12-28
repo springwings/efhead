@@ -159,19 +159,16 @@ export default {
           {
             name: 'Reader',
             type: 'line',
-            stack: 'Total',
             data: reader
           },
           {
             name: 'Computer',
             type: 'line',
-            stack: 'Total',
             data: computer
           },
           {
             name: 'Writer',
-            type: 'line',
-            stack: 'Total',
+            type: 'line', 
             data: writer
           }
         ]

@@ -40,8 +40,8 @@
                 <el-button type="text" slot="reference">信息</el-button>
                 <ul>
                   <el-dropdown-item @click.native="handleStatus(row)">任务状态</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleDetail(row)">任务信息</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleConfig(row)">任务配置</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleDetail(row)">统计信息</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleConfig(row)">配置任务</el-dropdown-item>
                 </ul>
               </el-popover>
               <el-popover trigger="click">
@@ -80,31 +80,34 @@
         <pre v-html="detail"></pre>
       </code>
     </el-dialog>
-    <el-dialog title="任务配置" :visible.sync="showXML" :close-on-click-modal="false">
+    <el-dialog title="dialogTitle" :visible.sync="showXML" :close-on-click-modal="false">
       <codemirror
-        v-model="code"
+        v-model="edit_instance.code"
         :options="cmOptions"
       ></codemirror>
+      <div class="flex flex-center" style="margin-top: 16px">
+          <el-button @click="handleUpdateTask" type="primary">修改任务</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import basicApi from '@/request/api/basic'
+import { Base64 } from '@/utils/Base64'
 
 export default {
   data () {
     return {
-      code: '',
+      edit_instance:{},
       showXML: false,
       tableData: [],
       cmOptions: {
         tabSize: 4,
         mode: 'text/xml',
-        theme: 'ayu-dark',
+        theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
-        readOnly: true,
         matchBrackets: true
       },
       originData: [],
@@ -162,6 +165,23 @@ export default {
             })
           })
         },
+    handleUpdateTask(){
+      let base64 = new Base64()
+      basicApi.efm_doaction_post({
+        ac: 'updateInstanceXml',
+        content: base64.encode(this.edit_instance.code),
+        instance:this.edit_instance.instance
+      }).then(res => {
+        this.edit_instance = {}
+        this.showXML = false
+        this.$notify({
+          title: '成功',
+          message: '保存成功',
+          type: 'success',
+          duration: 6000
+        })
+      })
+    },
     handleStatus (row) {
       this.dialogTitle = '任务状态'
       basicApi.efm_doaction({
@@ -342,7 +362,8 @@ export default {
         instance: row.Instance
       }).then(res => {
         let data = res.response.datas
-        this.code = typeof data === 'string' ? data : ''
+        this.edit_instance.code = typeof data === 'string' ? data : ''
+        this.edit_instance.instance = row.Instance
         this.showXML = true
       })
     },

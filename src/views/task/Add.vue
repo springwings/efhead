@@ -18,7 +18,7 @@
         ></codemirror>
       </el-form-item>
       <el-form-item label="">
-        <el-button type="primary" :loading="loading" @click="handleSubmit">确定</el-button>
+        <el-button type="primary" :loading="loading" @click="handleSubmit">添加任务</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -63,7 +63,7 @@ export default {
       cmOptions: {
         tabSize: 4,
         mode: 'text/xml',
-        theme: 'ayu-dark',
+        theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
         matchBrackets: true
