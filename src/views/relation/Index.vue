@@ -9,7 +9,7 @@
            <i class="el-icon-caret-right"></i> 箭头方向表示数据流向<br>
           <em class="color-block" style="background:#999"></em> 灰色表示是孤立节点<br>
           <em class="color-block" style="background:#16ccb6"></em> 深蓝色表示是结束节点<br>
-          <em class="color-block" style="background:#ff6e00"></em> 橙色表示节点非健康状态
+          <em class="color-block" style="background:#ff6e00"></em> 橙色表示节点非健康状态<br>(节点中断或未打开读写)
         </div>
         <div id="circle_view" style="display:none;float:left;margin:10px 0 0 10px ">
           <i class="el-icon-caret-right"></i> 箭头方向表示数据流向<br>

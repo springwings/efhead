@@ -5,6 +5,7 @@
           <el-input style="width: 300px" @keyup.native.enter="handleSearch" placeholder="请输入资源名称" @clear="handleSearch" v-model="search.name" clearable :maxlength="32"></el-input>
         </el-form-item>
         <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <router-link to="/resourcesManage" style="float:right" class="el-button el-button--success">修改资源配置文件</router-link>
       </el-form>
       <el-table stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="name" label="资源名称" :min-width="120"></el-table-column>
@@ -15,7 +16,7 @@
             <div style="white-space: pre-wrap;">{{ JSON.stringify(row.pools, null, 2) }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="资源状态">
+        <el-table-column prop="status" label="健康状态">
             <template slot-scope="{ row }">
               <i v-if="row.status !== Normal" class="el-button--success is-circle padblock">{{ row.status }}</i>
               <i v-else class="el-button--info is-circle padblock">{{ row.status }}</i>

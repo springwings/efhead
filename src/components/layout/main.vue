@@ -28,7 +28,7 @@
                   :index="chItem.path"
                 >{{chItem.title}}</el-menu-item>
               </el-submenu>
-              <el-menu-item v-else :index="item.path">
+              <el-menu-item v-else-if="!item.meta.hidden" :index="item.path">
                 <i :class="item.meta.icon"></i>
                 <span slot="title">{{item.meta.title}}</span>
               </el-menu-item>

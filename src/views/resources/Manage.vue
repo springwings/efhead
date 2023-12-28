@@ -5,7 +5,7 @@
       :options="cmOptions"
     ></codemirror>
     <div class="flex flex-center" style="margin-top: 16px">
-      <el-button @click="handleEdit" type="primary">保存</el-button>
+      <el-button @click="handleEdit" type="primary">更新资源</el-button>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
       cmOptions: {
         tabSize: 4,
         mode: 'text/xml',
-        theme: 'ayu-dark',
+        theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
         matchBrackets: true

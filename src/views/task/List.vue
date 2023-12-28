@@ -5,6 +5,7 @@
           <el-input style="width: 300px" @keyup.native.enter="handleSearch" placeholder="请输入实例名称" @clear="handleSearch" v-model="search.Instance" clearable :maxlength="32"></el-input>
         </el-form-item>
         <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <router-link style="float:right" to="/addTask" class="el-button el-button--success">添加实例任务</router-link>
       </el-form>
       <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="Instance" label="实例名称" :min-width="150"></el-table-column>

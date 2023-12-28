@@ -7,13 +7,13 @@
 系统启动时间：{{summary_data.system_start_time}}</p></el-col>
   </el-row>
   <el-row :gutter="20">
-    <el-col :span="6"><div class="grid-content "><i class="el-icon-s-home dash_icon dash_blue"></i>
+    <el-col :span="6"><div class="grid-content "><i class="el-icon-office-building dash_icon dash_blue"></i>
       <div class="card-panel-description"><div class="card-panel-text"> 集群节点数 </div><span class="card-panel-num">
     {{summary_data.node_num}}
     </span></div>
     </div></el-col>
     <el-col :span="6"><div class="grid-content ">
-      <i class="el-icon-s-order dash_icon"></i>
+      <i class="el-icon-files dash_icon"></i>
         <div class="card-panel-description"><div class="card-panel-text"> 实例数 </div><span class="card-panel-num">
        {{summary_data.task_num}}
       </span></div>
@@ -25,15 +25,40 @@
         </span></div>
     </div></el-col>
     <el-col :span="6"><div class="grid-content ">
-      <i class="el-icon-files dash_icon"></i>
+      <i class="el-icon-share dash_icon"></i>
         <div class="card-panel-description"><div class="card-panel-text"> 集群模式 </div>
         <span class="card-panel-num" style="font-size:18px">
          {{summary_data.cluster_mode}}
       </span></div>
     </div></el-col>
   </el-row>
+<el-row>
+  <el-col :span="24"><div id="history_statistics" style="min-height:300px" class="grid-content"></div></el-col>
+</el-row>
   <el-row :gutter="20">
-    <el-col :span="16"><div class="grid-content ">
+   <el-col :span="8">
+    <div class="grid-content" style="min-height:300px;padding:0 15px"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px 0;">系统告警信息监控</p>
+      <div class="el-table__header-wrapper">
+      <table  class="waring_table">
+      <tbody>
+        <tr><td class="el-title">L1 系统提示信息</td><td>
+  <label>{{summary_data.error_ignore}}</label>
+      </td></tr>
+        <tr><td style="color:#01bfb3" class="el-title">L2 需处理错误消息</td><td>
+        <label>{{summary_data.error_dispose}}</label>
+        </td></tr>
+        <tr><td style="color:#E6A23C" class="el-title">L3 任务中断消息</td><td>
+        <label>{{summary_data.error_breakoff}}</label>
+         </td></tr>
+        <tr><td style="color:#F56C6C" class="el-title">L4 任务终结消息</td><td>
+        <label>{{summary_data.error_termination}}</label>
+         </td></tr>
+        </tbody>
+      </table>
+     </div></div>
+    </el-col>
+
+    <el-col :span="8"><div class="grid-content ">
       <template>
       <el-table
         :data="tableData"
@@ -51,14 +76,15 @@
       </el-table>
     </template>
      </div></el-col>
+
     <el-col :span="8">
-    <div class="grid-content" style="min-height:25px;color:rgb(16 167 162);text-align:right;font-size:16px;"><p style="padding:20px;">集群使用资源监控</p></div>
+    <div class="grid-content" style="min-height:25px;color:rgb(16 167 162);font-size:18px;"><p style="padding:20px;">集群使用资源监控</p></div>
     <div class="grid-content usage_progress"  style="min-height:45px;">
       CPU使用率
       <el-progress
-    v-if="summary_data.memory_usage"
-      :percentage="summary_data.memory_usage"
-    :class="progressStatus(summary_data.memory_usage)"
+    v-if="summary_data.cpu_usage"
+      :percentage="summary_data.cpu_usage"
+    :class="progressStatus(summary_data.cpu_usage)"
       ></el-progress>
       </div>
       <div class="grid-content usage_progress" style="min-height:45px;">
@@ -78,7 +104,9 @@
   </div>
 </template>
 <script>
+import * as echarts from 'echarts'
 import basicApi from '@/request/api/basic'
+
 
 export default {
   data () {
@@ -88,7 +116,68 @@ export default {
       tableData:[]
     }
   },
+  mounted () {
+    this.chart = echarts.init(document.getElementById('history_statistics'))
+  },
+  beforeDestroy() {
+  //  clearInterval(this.interval_ins1);
+  },
   methods: {
+    drawHistory(chart,reader,writer,computer,dateinfo){
+      var option;
+      var dayString = `三端最近 ${dateinfo.length}天数据统计`
+      option = {
+        title: {
+          text: dayString
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['Reader', 'Computer', 'Writer']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: dateinfo
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: 'Reader',
+            type: 'line',
+            stack: 'Total',
+            data: reader
+          },
+          {
+            name: 'Computer',
+            type: 'line',
+            stack: 'Total',
+            data: computer
+          },
+          {
+            name: 'Writer',
+            type: 'line',
+            stack: 'Total',
+            data: writer
+          }
+        ]
+      };
+      chart.setOption(option)
+    },
     progressStatus (data) {
       if (data >= 90) {
         return 'exception'
@@ -106,12 +195,28 @@ export default {
           return '<i class="el-button--info is-circle">异常</i>';
       }
     },
+    getTimestamps(dayNum) {
+      const currentDate = new Date();
+      currentDate.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' });
+      var currentZeroTimestamp = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate(),
+        0, 0, 0, 0
+      ).getTime();
+      currentZeroTimestamp = currentZeroTimestamp/1000
+      const timestamps = [currentZeroTimestamp];
+      for (let i = 1; i < dayNum-1; i++) {
+        const timestamp = currentZeroTimestamp - i * 24 * 60 * 60;
+        timestamps.push(timestamp);
+      }
+      return timestamps;
+    },
     getSumaryData () {
       basicApi.efm_doaction({
         ac: 'globalStatus'
       }).then(res => {
         this.summary_data = Object.assign([], res.response.datas)
-        this.loading = false
         this.tableData = [{conf_name: '是否开启调试',conf_value: this.summary_data.is_debug.toString()},
           {conf_name: '系统语言',conf_value: this.summary_data.lang},
           {conf_name: '是否开启批写模式',conf_value: this.summary_data.write_batch.toString()},
@@ -119,9 +224,42 @@ export default {
           {conf_name: '系统配置路径',conf_value: this.summary_data.sys_config_path},
           {conf_name: '系统数据路径',conf_value: this.summary_data.datas_config_path},
           {conf_name: '插件路径',conf_value: this.summary_data.plugin_path}]
+        var reader = []
+        var writer = []
+        var computer = []
+        var dataArray = Object.entries(this.summary_data.reader).sort((a, b) => b[0] - a[0])
+        var timestamps = this.getTimestamps(30);
+        var dateinfo = timestamps.map(timestamp => {
+          var date = new Date(timestamp*1000+28800000);
+          return date.toISOString().slice(0, 10);
+        });
+        timestamps.forEach(key => {
+          if (this.summary_data.reader.hasOwnProperty(key)) {
+            reader.push(this.summary_data.reader[key]);
+          }else{
+            reader.push(0);
+          }
+          if (this.summary_data.writer.hasOwnProperty(key)) {
+            writer.push(this.summary_data.writer[key]);
+          }else{
+            writer.push(0);
+          }
+          if (this.summary_data.computer.hasOwnProperty(key)) {
+            computer.push(this.summary_data.computer[key]);
+          }else{
+            computer.push(0);
+          }
+        });
+        reader.reverse()
+        writer.reverse()
+        computer.reverse()
+        dateinfo.reverse()
+        this.drawHistory(this.chart,reader,writer,computer,dateinfo)
+        this.loading = false
       })
     }
   },
+
   created () {
     this.getSumaryData()
   }
@@ -140,7 +278,7 @@ export default {
 }
 .grid-content {
   border-radius: 4px;
-  min-height: 85px;
+  min-height: 98px;
   background:#fff;
 }
 .grid-info{
@@ -155,7 +293,7 @@ export default {
 }
 .dash_icon{
   font-size:65px;
-  padding:8px;
+  padding:18px 8px 8px 8px;
   color:#36a3f7;
 }
 .card-panel-description{
@@ -190,4 +328,7 @@ export default {
     }
   }
 }
+.waring_table{width:100%;margin-top:10px}
+.waring_table label{font-size:18px;}
+.waring_table tr{height:55px;line-height:55px}
 </style>
