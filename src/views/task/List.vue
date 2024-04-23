@@ -4,48 +4,68 @@
         <el-form-item label="" prop="instance">
           <el-input style="width: 300px" @keyup.native.enter="handleSearch" placeholder="请输入实例名称" @clear="handleSearch" v-model="search.Instance" clearable :maxlength="32"></el-input>
         </el-form-item>
-        <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" @click="handleSearch" style="width: 120px">搜索</el-button>
         <router-link style="float:right" to="/addTask" class="el-button el-button--success">添加实例任务</router-link>
       </el-form>
       <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
-        <el-table-column prop="Instance" label="实例名称" :min-width="150"></el-table-column>
-        <el-table-column prop="Alias" label="实例别名"></el-table-column>
-        <el-table-column prop="FullCron" label="全量定时"></el-table-column>
-        <el-table-column prop="DeltaCron" label="增量定时"></el-table-column>
-        <el-table-column prop="ReadFrom" label="读取端"></el-table-column>
-        <el-table-column prop="WriteTo" label="写入端"></el-table-column>
-        <el-table-column prop="SearchFrom" label="搜索端"></el-table-column>
-        <el-table-column prop="IsVirtualPipe" label="虚任务">
+        <el-table-column prop="Instance" label="实例名称" :min-width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Remark" label="说明" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Alias" label="实例别名" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="FullCron" label="全量定时" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="DeltaCron" label="增量定时" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ReadFrom" label="读取端" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+             <el-button type="text" @click.native="searchResource(row.ReadFrom)">{{ row.ReadFrom }}</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column prop="WriteTo" label="写入端" show-overflow-tooltip>
+        <template slot-scope="{ row }">
+          <el-button type="text" @click.native="searchResource(row.WriteTo)">{{ row.WriteTo }}</el-button>
+        </template>
+        </el-table-column>
+        <el-table-column prop="SearchFrom" label="搜索端" show-overflow-tooltip>
+        <template slot-scope="{ row }">
+          <el-button type="text" @click.native="searchResource(row.SearchFrom)">{{ row.SearchFrom }}</el-button>
+        </template>
+        </el-table-column>
+        <el-table-column prop="IsVirtualPipe" label="虚实例">
             <template slot-scope="{ row }">
-              <i v-if="row.IsVirtualPipe === true" class="el-button--success is-circle">{{ row.IsVirtualPipe }}</i>
-              <i v-else class="el-button--info is-circle padblock">{{ row.IsVirtualPipe }}</i>
+              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-check"></i>
+                <i v-else class="el-isclose el-icon-size el-icon-close"> </i>
             </template>
         </el-table-column>
-        <el-table-column prop="OpenTrans" label="读写开启">
+        <el-table-column prop="OpenTrans" label="读写">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenTrans === true" class="el-button--success is-circle padblock"> {{row.OpenTrans}} </i>
-            <i v-else class="el-button--info is-circle padblock"> {{row.OpenTrans}} </i>
+            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-check"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-close"> </i>
           </template>
+        </el-table-column>
+        <el-table-column prop="OpenTrans" label="计算">
+          <template slot-scope="{ row }">
+            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-check"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-close"> </i>
+            </template>
         </el-table-column>
         <el-table-column prop="RunState" label="健康状态">
             <template slot-scope="{ row }">
-              <i v-if="row.RunState === true" class="el-button--success is-circle padblock">{{ row.RunState }}</i>
-            <i v-else class="el-button--info is-circle padblock">{{ row.RunState }}</i>
+              <i v-if="row.RunState === true" class="el-isopen el-icon-size el-icon-check"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-close"></i>
             </template>
         </el-table-column>
-        <el-table-column prop="Manage" label="实例管理">
+        <el-table-column prop="Manage" label="实例管理" :min-width="180">
           <template slot-scope="{ row }">
             <div class="flex flex-around">
               <el-popover trigger="click">
-                <el-button type="text" slot="reference">信息</el-button>
+                <el-button slot="reference" type="success" >信息管理</el-button>
                 <ul>
                   <el-dropdown-item @click.native="handleStatus(row)">任务状态</el-dropdown-item>
                   <el-dropdown-item @click.native="handleDetail(row)">统计信息</el-dropdown-item>
                   <el-dropdown-item @click.native="handleConfig(row)">配置任务</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleInstanceSearch(row)">数据查询</el-dropdown-item>
                 </ul>
               </el-popover>
               <el-popover trigger="click">
-                <el-button type="text" slot="reference">管理</el-button>
+                <el-button slot="reference" type="primary" >任务控制</el-button>
                 <ul>
                   <el-dropdown-item @click.native="handleReload(row)">任务重载</el-dropdown-item>
                   <el-dropdown-item @click.native="handleStop(row)">停止增量任务</el-dropdown-item>
@@ -54,9 +74,9 @@
                   <el-dropdown-item @click.native="handleStopFull(row)">停止全量任务</el-dropdown-item>
                   <el-dropdown-item @click.native="handleResumeFull(row)">恢复全量任务</el-dropdown-item>
                   <el-dropdown-item @click.native="handleRunFull(row)">立即运行全量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleDelete(row)">删除任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleDeleteData(row)">删除任务数据</el-dropdown-item>
                   <el-dropdown-item @click.native="handleResetTask(row)">重置任务状态</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleDelete(row)">删除任务</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleDeleteData(row)">删除实例数据</el-dropdown-item>
                   <el-dropdown-item @click.native="handleReset(row)">重置断路器</el-dropdown-item>
                 </ul>
               </el-popover>
@@ -80,7 +100,7 @@
         <pre v-html="detail"></pre>
       </code>
     </el-dialog>
-    <el-dialog title="dialogTitle" :visible.sync="showXML" :close-on-click-modal="false">
+    <el-dialog :title="dialogTitle" :visible.sync="showXML" :close-on-click-modal="false">
       <codemirror
         v-model="edit_instance.code"
         :options="cmOptions"
@@ -183,7 +203,7 @@ export default {
       })
     },
     handleStatus (row) {
-      this.dialogTitle = '任务状态'
+      this.dialogTitle = row.Instance+' 任务状态'
       basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
@@ -197,7 +217,7 @@ export default {
       })
     },
     handleDetail (row) {
-      this.dialogTitle = '任务信息'
+      this.dialogTitle = row.Instance+ ' 任务信息'
       basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
@@ -209,6 +229,17 @@ export default {
           writer: data.writer
         }
         this.detail = this.syntaxHighlight(result)
+        this.visible = true
+      })
+    },
+    searchResource (resource) {
+      this.dialogTitle = resource+ ' 资源信息'
+      basicApi.efm_doaction({
+        ac: 'getResource',
+        name: resource
+      }).then(res => {
+        let data = res.response.datas
+        this.detail = this.syntaxHighlight(data)
         this.visible = true
       })
     },
@@ -346,7 +377,6 @@ export default {
     handleSearch () {
       let data = []
       this.originData.filter(item => {
-        // console.log(item)
         for (let key in this.search) {
           if (item[key].indexOf(this.search[key]) !== -1) {
             data.push(item)
@@ -356,7 +386,19 @@ export default {
       this.tableData = data
       this.page.total = data.length
     },
+    handleInstanceSearch(row){
+      this.dialogTitle = row.Instance+' 数据查询'
+      basicApi.efm_doaction({
+        ac: 'searchInstanceData',
+        instance: row.Instance
+      }).then(res => {
+        let data = res.response.datas
+        this.detail = data
+        this.visible = true
+      })
+    },
     handleConfig (row) {
+      this.dialogTitle = '修改 ' +row.Instance+' 任务配置'
       basicApi.efm_doaction({
         ac: 'getInstanceXml',
         instance: row.Instance
@@ -418,6 +460,9 @@ export default {
 ::v-deep .el-table .cell {
   white-space: nowrap;
 }
+pre{
+  white-space: pre-wrap;
+}
 .taskForm {
   background: white;
   padding: 22px 50px 0 50px;
@@ -425,5 +470,20 @@ export default {
 }
 .padblock{
   padding:2px 5px;
+}
+.el-table .el-table__cell{
+  padding:12px 5px;
+}
+.el-icon-size{
+  font-size:16px;
+}
+.el-isopen{
+  color:#11a14c;
+}
+.el-icon-close{
+  color:#c73a00;
+}
+.cell .el-button{
+  padding:6px 8px;
 }
 </style>

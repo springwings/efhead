@@ -199,10 +199,21 @@ button {
     width: 220px;
 }
 
-.key2 {
-    width: 220px;
+td.key2 {
+    min-width: 200px;
 }
 
 .string {
     color: #C80C0C;
+}
+.el-dialog__header{
+    background:#eee;
+    border-bottom: solid 2px #dedede;
+}
+.el-dialog__headerbtn{
+    font-size: 20px;
+}
+.CodeMirror{
+    line-height: 20px;
+    font-size: 14px;
 }

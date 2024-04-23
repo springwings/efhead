@@ -4,53 +4,53 @@
       <table class="clusterStatus" v-if="result">
         <tbody>
           <tr>
-            <td class="key">NODE_IP</td>
+            <td class="key">节点IP</td>
             <td class="number">{{ result.NODE_IP }}</td>
           </tr>
           <tr>
-          <td class="key">NODE_ID</td>
+          <td class="key">节点ID</td>
             <td class="number">{{ result.NODE_ID }}</td>
           </tr>
           <tr>
-            <td class="key">NODE_TYPE</td>
+            <td class="key">节点类型</td>
             <td class="string">{{ result.NODE_TYPE }}</td>
           </tr>
           <tr>
-            <td class="key">TASKS</td>
+            <td class="key">实例数</td>
             <td class="number">{{ result.TASKS }}</td>
           </tr>
           <tr>
-            <td class="key">STATUS</td>
+            <td class="key">集群状态</td>
             <td class="string">{{ result.STATUS }}</td>
           </tr>
           <tr>
-            <td class="key">THREAD_ACTIVE_COUNT</td>
+            <td class="key">线程使用率</td>
             <td class="number">
               <el-progress
-                v-if="result.THREAD_POOL_SIZE && result.THREAD_ACTIVE_COUNT"
+                v-if="result.THREAD_POOL_SIZE"
                 :percentage="Number((result.THREAD_ACTIVE_COUNT / result.THREAD_POOL_SIZE * 100).toFixed(1))"
                 :class="progressStatus(Number((result.THREAD_ACTIVE_COUNT / result.THREAD_POOL_SIZE * 100).toFixed(1)))"
               ></el-progress>
             </td>
           </tr>
           <tr>
-            <td class="key">WRITE_BATCH</td>
+            <td class="key">开启批量写</td>
             <td class="boolean">{{ result.WRITE_BATCH }}</td>
           </tr>
           <tr>
-            <td class="key">VERSION</td>
+            <td class="key">系统版本</td>
             <td class="string">{{ result.VERSION }}</td>
           </tr>
           <tr>
-            <td class="key">THREAD_POOL_SIZE</td>
-            <td class="number">{{ result.THREAD_POOL_SIZE }}</td>
+            <td class="key">系统线程配置数</td>
+            <td class="number">{{ result.SYS_THREAD_POOL_SIZE }}</td>
           </tr>
           <tr>
-            <td class="key">DISTRIBUTE_RUN</td>
+            <td class="key">分布式模式</td>
             <td class="boolean">{{ result.DISTRIBUTE_RUN }}</td>
           </tr>
           <tr>
-            <td class="key">MEMORY_USAGE</td>
+            <td class="key">内存使用率</td>
             <td class="number">
               <el-progress
                 v-if="result.MEMORY_USAGE"
@@ -60,7 +60,7 @@
             </td>
           </tr>
           <tr>
-              <td class="key">CPU_USAGE</td>
+              <td class="key">CPU使用率</td>
                 <td class="number">
                 <el-progress
                 v-if="result.CPU_USAGE"
@@ -70,7 +70,7 @@
               </td>
           </tr>
           <tr>
-            <td class="key">SERVICE_LEVEL</td>
+            <td class="key">开启服务级别</td>
             <td class="number">
                 <p v-if="(result.SERVICE_LEVEL&1)>0">searcher service</p>
                 <p v-if="(result.SERVICE_LEVEL&2)>0">writer service</p>
@@ -79,37 +79,37 @@
             </td>
           </tr>
           <tr>
-            <td class="key">Node Manage</td>
+            <td class="key">集群管理</td>
               <td class="number">
                 <a v-on:click="handleNode(result.NODE_ID,'restartNode')" type="button" class="el-button el-button--success">重启节点</a>
                 <a v-on:click="handleCluster('restartCluster')" type="button" class="el-button el-button--primary">重启集群</a>
                 <a v-on:click="handleCluster('stopCluster')" type="button" class="el-button el-button--info">停止集群</a>
               </td>
           </tr>
-          <tr v-if="this.result.SLAVES && Object.keys(this.result.SLAVES).length > 0" style="background:#cdcdcd;text-align:center;font-weight:bold"><td colspan="2">SLAVES</td></tr>
+          <tr v-if="this.result.SLAVES && Object.keys(this.result.SLAVES).length > 0" style="background:rgb(221 241 240);text-align:center;font-weight:bold"><td colspan="2" ><i class="el-icon-set-up"></i> 集群从节点</td></tr>
           <tr v-for="(obj, ip) in result.SLAVES" :key="ip">
                 <td class="key">{{ ip }}</td>
                 <td class="slaves">
                   <tr>
-                    <td class="key2" style="width:120px">NODE_ID</td>
+                    <td class="key2" style="width:120px">节点IP</td>
                     <td class="number" style="width:90%">{{ obj.NODE_ID }}</td>
                   </tr>
                   <tr>
-                    <td class="key2" style="width:120px">TASKS</td>
+                    <td class="key2" style="width:120px">实例数</td>
                     <td class="number" style="width:90%">{{ obj.TASKS }}</td>
                   </tr>
                   <tr>
-                    <td class="key2">THREAD_ACTIVE_COUNT</td>
+                    <td class="key2">线程使用率</td>
                     <td class="number">
                       <el-progress
-                        v-if="obj.THREAD_POOL_SIZE && obj.THREAD_ACTIVE_COUNT"
+                        v-if="obj.THREAD_POOL_SIZE"
                         :percentage="Number((obj.THREAD_ACTIVE_COUNT / obj.THREAD_POOL_SIZE * 100).toFixed(1))"
                         :class="progressStatus(Number((obj.THREAD_ACTIVE_COUNT / obj.THREAD_POOL_SIZE * 100).toFixed(1)))"
                       ></el-progress>
                     </td>
                   </tr>
                   <tr>
-                    <td class="key2">MEMORY_USAGE</td>
+                    <td class="key2">内存使用率</td>
                     <td class="number">
                       <el-progress
                         v-if="obj.MEMORY_USAGE"
@@ -119,7 +119,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="key2">CPU_USAGE</td>
+                    <td class="key2">CPU使用率</td>
                     <td class="number">
                           <el-progress
                            v-if="obj.CPU_USAGE"
@@ -129,21 +129,21 @@
                      </td>
                   </tr>
                   <tr>
-                    <td class="key2">THREAD_POOL_SIZE</td>
+                    <td class="key2">系统线程配置数</td>
                     <td class="number">
-                      {{ obj.THREAD_POOL_SIZE }}
+                      {{ obj.SYS_THREAD_POOL_SIZE }}
                     </td>
                   </tr>
                   <tr>
-                    <td class="key2">VERSION</td>
+                    <td class="key2">系统版本</td>
                     <td class="string">{{ obj.VERSION }}</td>
                   </tr>
                   <tr>
-                    <td class="key2">WRITE_BATCH</td>
+                    <td class="key2">开启批量写</td>
                     <td class="boolean">{{ obj.WRITE_BATCH }}</td>
                   </tr>
                   <tr>
-                     <td class="key2">Node Manage</td>
+                     <td class="key2">节点管理</td>
                      <td class="boolean">
                       <a type="button" v-on:click="handleNode(obj.NODE_ID,'restartNode')" class="el-button el-button--success is-round">重启</a>
                       <a type="button" v-on:click="handleNode(obj.NODE_ID,'stopNode')" class="el-button el-button--info is-round">停止</a>

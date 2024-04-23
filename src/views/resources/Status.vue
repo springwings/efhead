@@ -4,14 +4,15 @@
         <el-form-item label="" prop="name">
           <el-input style="width: 300px" @keyup.native.enter="handleSearch" placeholder="请输入资源名称" @clear="handleSearch" v-model="search.name" clearable :maxlength="32"></el-input>
         </el-form-item>
-        <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" @click="handleSearch" style="width: 120px">搜索</el-button>
         <router-link to="/resourcesManage" style="float:right" class="el-button el-button--success">修改资源配置文件</router-link>
       </el-form>
       <el-table stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="name" label="资源名称" :min-width="120"></el-table-column>
+        <el-table-column prop="remark" label="资源说明" show-overflow-tooltip></el-table-column>
         <el-table-column prop="type" label="资源类型"></el-table-column>
-        <el-table-column prop="hosts" label="服务器地址" :min-width="150"></el-table-column>
-        <el-table-column prop="pools" label="资源池" :min-width="250">
+        <el-table-column prop="hosts" label="资源地址" :min-width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="pools" label="资源池状态" :min-width="250" show-overflow-tooltip>
           <template slot-scope="{ row }">
             <div style="white-space: pre-wrap;">{{ JSON.stringify(row.pools, null, 2) }}</div>
           </template>
@@ -39,7 +40,7 @@
         <pre v-html="detail"></pre>
       </code>
     </el-dialog>
-    <el-dialog title="任务配置" :visible.sync="showXML" :close-on-click-modal="false">
+    <el-dialog title="资源配置" :visible.sync="showXML" :close-on-click-modal="false">
       <codemirror
         v-model="code"
         :options="cmOptions"

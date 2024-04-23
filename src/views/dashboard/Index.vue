@@ -41,16 +41,16 @@
       <div class="el-table__header-wrapper">
       <table  class="waring_table">
       <tbody>
-        <tr><td class="el-title">L1 系统提示信息</td><td>
+        <tr><td class="el-title">L1级错误：系统警告类消息</td><td>
   <label>{{summary_data.error_ignore}}</label>
       </td></tr>
-        <tr><td style="color:#01bfb3" class="el-title">L2 需处理错误消息</td><td>
+        <tr><td style="color:#01bfb3" class="el-title">L2级错误：需处理类消息</td><td>
         <label>{{summary_data.error_dispose}}</label>
         </td></tr>
-        <tr><td style="color:#E6A23C" class="el-title">L3 任务中断消息</td><td>
+        <tr><td style="color:#E6A23C" class="el-title">L3级错误：需及时处理类任务中断消息</td><td>
         <label>{{summary_data.error_breakoff}}</label>
          </td></tr>
-        <tr><td style="color:#F56C6C" class="el-title">L4 任务终结消息</td><td>
+        <tr><td style="color:#F56C6C" class="el-title">L4级错误：需立刻处理类任务终结消息</td><td>
         <label>{{summary_data.error_termination}}</label>
          </td></tr>
         </tbody>
@@ -168,7 +168,7 @@ export default {
           },
           {
             name: 'Writer',
-            type: 'line', 
+            type: 'line',
             data: writer
           }
         ]
@@ -203,7 +203,7 @@ export default {
       ).getTime();
       currentZeroTimestamp = currentZeroTimestamp/1000
       const timestamps = [currentZeroTimestamp];
-      for (let i = 1; i < dayNum-1; i++) {
+      for (let i = 1; i < dayNum; i++) {
         const timestamp = currentZeroTimestamp - i * 24 * 60 * 60;
         timestamps.push(timestamp);
       }
@@ -224,7 +224,6 @@ export default {
         var reader = []
         var writer = []
         var computer = []
-        var dataArray = Object.entries(this.summary_data.reader).sort((a, b) => b[0] - a[0])
         var timestamps = this.getTimestamps(30);
         var dateinfo = timestamps.map(timestamp => {
           var date = new Date(timestamp*1000+28800000);
@@ -261,6 +260,7 @@ export default {
     this.getSumaryData()
   }
 }
+console.log("人的生命是一个常数，而人的作为却是变量。生命就是在超常的作为中得到延展，走向永恒。")
 </script>
 
 <style lang="scss" scoped>

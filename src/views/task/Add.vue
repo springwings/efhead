@@ -11,7 +11,7 @@
           <el-checkbox :disabled="levelDisabled" :label="2">WithCompute</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label="Content" prop="content">
+      <form label="Content" prop="content">
         <codemirror
           v-model="formData.content"
           :options="cmOptions"
@@ -20,7 +20,7 @@
       <el-form-item label="">
         <el-button type="primary" :loading="loading" @click="handleSubmit">添加任务</el-button>
       </el-form-item>
-    </el-form>
+    </form>
   </div>
 </template>
 

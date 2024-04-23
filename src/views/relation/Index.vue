@@ -8,7 +8,7 @@
         <div id="tree_view" style="display:none;float:left;margin:10px 0 0 10px ">
            <i class="el-icon-caret-right"></i> 箭头方向表示数据流向<br>
           <em class="color-block" style="background:#999"></em> 灰色表示是孤立节点<br>
-          <em class="color-block" style="background:#16ccb6"></em> 深蓝色表示是结束节点<br>
+          <em class="color-block" style="background:#87b9ed"></em> 深蓝色表示是结束节点<br>
           <em class="color-block" style="background:#ff6e00"></em> 橙色表示节点非健康状态<br>(节点中断或未打开读写)
         </div>
         <div id="circle_view" style="display:none;float:left;margin:10px 0 0 10px ">
@@ -187,19 +187,60 @@ export default {
                     })),
                     categories
                 }
-
                 const baseLabel = {
-                    fontSize: 14,
-                    lineHeight: 21,
-                    padding:5,
-                    borderRadius:10,
-                    width:90,
-                    overflow: 'breakAll',
+                  fontSize: 13,
+                  fontWeight:"bold",
+                  lineHeight: 21,
+                  borderWidth: 1,
+                  padding:2,
+                  borderRadius:10,
+                  align: 'center',
+                  overflow: 'breakAll',
+                  backgroundColor: '#ecf5ff',
+                  borderColor: '#b3d8ff',
+                }
+                const endnode = {
+                  fontSize: 13,
+                  fontWeight:"bold",
+                  lineHeight: 21,
+                  borderWidth: 1,
+                  padding:2,
+                  borderRadius:10,
+                  align: 'center',
+                  overflow: 'breakAll',
+                  backgroundColor: '#b4d9ff',
+                  borderColor: '#7ea9d5',
+                }
+                const unhealthnode = {
+                  fontSize: 13,
+                  fontWeight:"bold",
+                  lineHeight: 21,
+                  borderWidth: 1,
+                  padding:2,
+                  borderRadius:10,
+                  align: 'center',
+                  overflow: 'breakAll',
+                  backgroundColor: '#ffc39d',
+                  borderColor: '#f38742',
+                }
+                const singlenode = {
+                  fontSize: 13,
+                  fontWeight:"bold",
+                  lineHeight: 21,
+                  borderWidth: 1,
+                  padding:2,
+                  borderRadius:10,
+                  align: 'center',
+                  overflow: 'breakAll',
+                  backgroundColor: '#eee',
+                  borderColor: '#ccc',
                 }
                 const lineLabel = {
                     fontSize: 12,
-                    color: '#999',
-                    offset: [0, 10]
+                    color: '#666',
+                    lineHeight: 21,
+                    padding: 10,
+                    offset: [-15, -6]
                 }
                 const findRoots = () => {
                     const rootNodes = graph.nodes.filter(node => (node.category===1 || node.category===2));
@@ -217,16 +258,15 @@ export default {
                         label: lineLabel,
                         symbol: isconnect ? "arrow":"rect",
                         itemStyle: { color: isconnect ? '#197700' : '#aa1a12'},
-                        symbolSize: isconnect? 8:10,
+                        symbolSize: isconnect? 8:12,
                         symbolRotate: -90,
                         children: [
                             {
                                 id: parentNode.id,
                                 name: parentNode.name,
-                                label: baseLabel,
+                                label: parentNode.status==0 ?(parentNode.category==3 ? endnode : (parentNode.category==1? singlenode :baseLabel)) :unhealthnode,
                                 category: parentNode.category,
-                                symbol: "circle",
-                                symbolSize:16,
+                                symbolSize:0.1,
                                 itemStyle: {
                                     color: parentNode.status==0 ?(parentNode.category==0 ? '#2bbedb' : (parentNode.category==2? '#16ccb6' : (parentNode.category==1?'#888':'#48838c'))) : "#ff6e00"
                                 },
@@ -238,14 +278,15 @@ export default {
 
                 const roots = findRoots();
                 const treeData = {
-                    name: 'EF',
+                    name: 'ROOT',
                     id: '',
-                    symbolSize: 20,
+                    label: baseLabel,
+                    symbolSize: 0.1,
                     category:2,
                     itemStyle: {
                         normal: {color: '#859906',backgroundColor: '#859906'}
                     },
-                    children: roots.map(root => buildTree(root.id,"~",true)).filter(Boolean)
+                    children: roots.map(root => buildTree(root.id,"",true)).filter(Boolean)
                 };
                 this.$nextTick(() => {
                     this.drawtree(treeData, graph,chart)
@@ -284,8 +325,8 @@ export default {
                             focus: 'descendant'
                         },
                         scaleLimit: {
-                            min: 0.4,
-                            max: 2
+                            min: 0.8,
+                            max: 3
                         },
                         lineStyle: {
                             width:0.5,
