@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <codemirror
-      v-model="code"
-:options="cmOptions"
-  ></codemirror>
-  <div class="flex flex-center" style="margin-top: 16px">
-  <el-button @click="handleEdit" type="primary">更新配置</el-button>
+  <el-card>
+    <div style="float:left;font-weight:bold;font-size:18px">
+       系统配置 > config.properties
+    </div>
+    <div class="flex flex-right">
+        <el-button  @click="handleEdit" style="width:150px" type="primary">更新配置</el-button>
+    </div>
   </div>
+  <div style="border:solid 1px #ccc;margin-top:20px;">
+    <codemirror v-model="code" :options="cmOptions" style="margin-top:10px;"></codemirror>
   </div>
+  </el-card >
   </template>
 
   <script>
@@ -21,11 +24,12 @@ export default {
       code: '',
       cmOptions: {
         tabSize: 4,
-        mode: 'text/xml',
+        mode: 'text/javascript',
         theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
-        matchBrackets: true
+        matchBrackets: true,
+        lineWrapping: true
       }
     }
   },
@@ -61,6 +65,6 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
-  height: 800px;
+  height: 600px;
 }
 </style>

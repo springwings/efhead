@@ -91,7 +91,7 @@
                 <td class="key">{{ ip }}</td>
                 <td class="slaves">
                   <tr>
-                    <td class="key2" style="width:120px">节点IP</td>
+                    <td class="key2" style="width:120px">节点ID</td>
                     <td class="number" style="width:90%">{{ obj.NODE_ID }}</td>
                   </tr>
                   <tr>

@@ -30,20 +30,20 @@
         </el-table-column>
         <el-table-column prop="IsVirtualPipe" label="虚实例">
             <template slot-scope="{ row }">
-              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-check"></i>
-                <i v-else class="el-isclose el-icon-size el-icon-close"> </i>
+              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-open"></i>
+                <i v-else class="el-isclose el-icon-size el-icon-turn-off"> </i>
             </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="读写">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-check"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-close"> </i>
+            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-open"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-turn-off"> </i>
           </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="计算">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-check"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-close"> </i>
+            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-open"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-turn-off"> </i>
             </template>
         </el-table-column>
         <el-table-column prop="RunState" label="健康状态">
@@ -58,14 +58,15 @@
               <el-popover trigger="click">
                 <el-button slot="reference" type="success" >信息管理</el-button>
                 <ul>
-                  <el-dropdown-item @click.native="handleStatus(row)">任务状态</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleStatus(row)">实例状态</el-dropdown-item>
                   <el-dropdown-item @click.native="handleDetail(row)">统计信息</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleConfig(row)">配置任务</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleConfig(row)">配置实例</el-dropdown-item>
                   <el-dropdown-item @click.native="handleInstanceSearch(row)">数据查询</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleInstanceAnalyze(row)">分析报告</el-dropdown-item>
                 </ul>
               </el-popover>
               <el-popover trigger="click">
-                <el-button slot="reference" type="primary" >任务控制</el-button>
+                <el-button slot="reference" type="primary" >实例控制</el-button>
                 <ul>
                   <el-dropdown-item @click.native="handleReload(row)">任务重载</el-dropdown-item>
                   <el-dropdown-item @click.native="handleStop(row)">停止增量任务</el-dropdown-item>
@@ -475,7 +476,7 @@ pre{
   padding:12px 5px;
 }
 .el-icon-size{
-  font-size:16px;
+  font-size:20px;
 }
 .el-isopen{
   color:#11a14c;

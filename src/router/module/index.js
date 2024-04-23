@@ -14,7 +14,7 @@ const SysRoutes = [
     name: 'taskList',
     component: () => import('views/task/List.vue'),
     meta: {
-      title: '任务管理',
+      title: '实例管理',
       icon: 'el-icon-files',
       hidden: false
     }
@@ -24,7 +24,7 @@ const SysRoutes = [
     name: 'relation',
     component: () => import('views/relation/Index.vue'),
     meta: {
-      title: '任务监控',
+      title: '实例监控',
       icon: 'el-icon-data-line',
       hidden: false
     }
@@ -34,7 +34,7 @@ const SysRoutes = [
     name: '',
     component: () => import('views/task/Add.vue'),
     meta: {
-      title: '添加任务',
+      title: '添加实例',
       icon: 'el-icon-folder-add',
       hidden: true
     }
@@ -70,12 +70,22 @@ const SysRoutes = [
     }
   },
   {
-    path: '/systemManage',
+    path: '/systemConfig',
     name: '',
-    component: () => import('views/system/Manage.vue'),
+    component: () => import('views/system/Config.vue'),
     meta: {
       title: '系统配置',
       icon: 'el-icon-setting',
+      hidden: false
+    }
+  },
+  {
+    path: '/systemHelp',
+    name: '',
+    component: () => import('views/system/Help.vue'),
+    meta: {
+      title: '常见问题',
+      icon: 'el-icon-question',
       hidden: false
     }
   }

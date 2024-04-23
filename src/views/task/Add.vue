@@ -1,27 +1,24 @@
 <template>
+  <el-card >
   <div>
-    <el-form ref="taskForm" label-width="90px" :model="formData" :rules="formRules">
-      <el-form-item label="Instance" prop="instance">
-        <el-input v-model="formData.instance" clearable placeholder="请输入"></el-input>
+    <el-form ref="taskForm" label-width="120px" :model="formData" :rules="formRules">
+      <el-form-item label="实例名称" prop="instance" class="task_label">
+        <el-input v-model="formData.instance" clearable placeholder="请输入实例名称，非中文"></el-input>
       </el-form-item>
-      <el-form-item label="Level" prop="level">
-        <el-checkbox-group @change="handleLevel" v-model="formData.level">
+      <el-form-item label="实例运行类型" prop="level" class="task_label">
+        <el-checkbox-group @change="handleLevel" v-model="formData.level" class="task_type">
           <el-checkbox :label="0">Blank</el-checkbox>
-          <el-checkbox :label="1">Trans</el-checkbox>
-          <el-checkbox :disabled="levelDisabled" :label="2">WithCompute</el-checkbox>
+          <el-checkbox :label="1">开启读写</el-checkbox>
+          <el-checkbox :disabled="levelDisabled" :label="2">开启计算</el-checkbox>
         </el-checkbox-group>
+        <el-button type="primary" :loading="loading" @click="handleSubmit" class="task_add">添加实例</el-button>
       </el-form-item>
       <form label="Content" prop="content">
-        <codemirror
-          v-model="formData.content"
-          :options="cmOptions"
-        ></codemirror>
-      </el-form-item>
-      <el-form-item label="">
-        <el-button type="primary" :loading="loading" @click="handleSubmit">添加任务</el-button>
+        <codemirror v-model="formData.content" :options="cmOptions" style="margin-top:10px;"></codemirror>
       </el-form-item>
     </form>
   </div>
+  </el-card >
 </template>
 
 <script>
@@ -66,7 +63,8 @@ export default {
         theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
-        matchBrackets: true
+        matchBrackets: true,
+        lineWrapping: true
       },
       levelDisabled: true,
       loading: false
@@ -89,7 +87,7 @@ export default {
       }
     },
     getXML () {
-      fetch('xml/task.xml').then(res => res.text()).then(res => {
+      fetch('contents/task.xml').then(res => res.text()).then(res => {
         this.formData.content = res
       })
     },
@@ -126,6 +124,16 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
-  height: 600px;
+  height: 500px;
+}
+.task_label{
+  font-weight: bold;
+}
+.task_add{
+  float: right;
+  width: 150px;
+}
+.task_type{
+  float: left;
 }
 </style>

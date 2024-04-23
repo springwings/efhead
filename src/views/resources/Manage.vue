@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <codemirror
-      v-model="code"
-      :options="cmOptions"
-    ></codemirror>
-    <div class="flex flex-center" style="margin-top: 16px">
-      <el-button @click="handleEdit" type="primary">更新资源</el-button>
-    </div>
+  <el-card>
+  <div style="float:left;font-weight:bold;font-size:18px">
+  资源配置 > resource.xml
   </div>
+  <div class="flex flex-right">
+    <el-button @click="handleEdit" style="width:150px" type="primary">更新资源</el-button>
+  </div>
+  <div style="border:solid 1px #ccc;margin-top:20px;">
+    <codemirror v-model="code" :options="cmOptions" style="margin-top:10px;"></codemirror>
+  </div>
+  </el-card >
 </template>
 
 <script>
@@ -25,7 +27,8 @@ export default {
         theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
-        matchBrackets: true
+        matchBrackets: true,
+        lineWrapping: true
       }
     }
   },
@@ -61,6 +64,6 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
-  height: 800px;
+  height: 600px;
 }
 </style>
