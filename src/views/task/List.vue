@@ -30,20 +30,20 @@
         </el-table-column>
         <el-table-column prop="IsVirtualPipe" label="虚实例">
             <template slot-scope="{ row }">
-              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-open"></i>
-                <i v-else class="el-isclose el-icon-size el-icon-turn-off"> </i>
+              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-star-on"></i>
+                <i v-else class="el-isclose el-icon-size el-icon-star-off"> </i>
             </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="读写">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-open"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-turn-off"> </i>
+            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-star-on"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-star-off"> </i>
           </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="计算">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-open"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-turn-off"> </i>
+            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-star-on"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-star-off"> </i>
             </template>
         </el-table-column>
         <el-table-column prop="RunState" label="健康状态">
@@ -65,20 +65,20 @@
                   <el-dropdown-item @click.native="handleInstanceAnalyze(row)">分析报告</el-dropdown-item>
                 </ul>
               </el-popover>
-              <el-popover trigger="click">
+              <el-popover  trigger="click">
                 <el-button slot="reference" type="primary" >实例控制</el-button>
                 <ul>
-                  <el-dropdown-item @click.native="handleReload(row)">任务重载</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleStop(row)">停止增量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleResume(row)">恢复增量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleRun(row)">立即运行增量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleStopFull(row)">停止全量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleResumeFull(row)">恢复全量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleRunFull(row)">立即运行全量任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleResetTask(row)">重置任务状态</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleDelete(row)">删除任务</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleDeleteData(row)">删除实例数据</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleReset(row)">重置断路器</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleStop(row)">停止增量任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleResume(row)">恢复增量任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleRun(row)">立即运行增量任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleStopFull(row)">停止全量任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleResumeFull(row)">恢复全量任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleRunFull(row)">立即运行全量任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleResetTask(row)">重置任务状态</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleDelete(row)">删除实例任务</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleDeleteData(row)">删除实例数据</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleReset(row)">重置断路器</el-dropdown-item>
+                  <el-dropdown-item :disabled="buttonDisabled" @click.native="handleReload(row)">实例重载</el-dropdown-item>
                 </ul>
               </el-popover>
             </div>
@@ -96,18 +96,13 @@
           background>
         </el-pagination>
       </div>
-    <el-dialog :title="dialogTitle" :visible.sync="visible" :close-on-click-modal="false">
-      <code>
-        <pre v-html="detail"></pre>
-      </code>
+    <el-dialog :top="dialogTop"  :title="dialogTitle" :visible.sync="visible" :close-on-click-modal="false">
+        <pre class="dialog-content" v-html="detail"></pre>
     </el-dialog>
-    <el-dialog :title="dialogTitle" :visible.sync="showXML" :close-on-click-modal="false">
-      <codemirror
-        v-model="edit_instance.code"
-        :options="cmOptions"
-      ></codemirror>
-      <div class="flex flex-center" style="margin-top: 16px">
-          <el-button @click="handleUpdateTask" type="primary">修改任务</el-button>
+    <el-dialog :top="dialogTop" :title="dialogTitle" :visible.sync="showXML" :close-on-click-modal="false">
+      <codemirror v-model="edit_instance.code" :options="cmOptions"></codemirror>
+      <div class="flex flex-center" style="margin-top: 5px">
+          <el-button @click="handleUpdateTask" type="primary">修改实例信息</el-button>
       </div>
     </el-dialog>
   </div>
@@ -120,6 +115,7 @@ import { Base64 } from '@/utils/Base64'
 export default {
   data () {
     return {
+      dialogTop: '5vh',
       edit_instance:{},
       showXML: false,
       tableData: [],
@@ -129,7 +125,8 @@ export default {
         theme: 'paraiso-light',
         lineNumbers: true,
         line: true,
-        matchBrackets: true
+        matchBrackets: true,
+        lineWrapping: true
       },
       originData: [],
       search: {
@@ -143,7 +140,8 @@ export default {
       },
       detail: '',
       dialogTitle: '',
-      loading: true
+      loading: true,
+      buttonDisabled: false,
     }
   },
   methods: {
@@ -155,7 +153,7 @@ export default {
       this.page.index = num
     },
     handleResetTask (row) {
-      this.$confirm('是否重置该任务状态？', '提示', {
+      this.$confirm('是否重置 '+row.Instance+' 该任务状态？', '提示', {
         type: 'warning'
       }).then(() => {
         basicApi.efm_doaction({
@@ -171,7 +169,7 @@ export default {
       })
     },
     handleReset (row) {
-          this.$confirm('是否重置该任务断路器？', '提示', {
+          this.$confirm('是否重置 '+row.Instance+' 该任务断路器？', '提示', {
             type: 'warning'
           }).then(() => {
             basicApi.efm_doaction({
@@ -181,6 +179,7 @@ export default {
               this.$notify({
                 title: '成功',
                 message: '重置成功',
+                type: 'success',
                 duration: 15000
               })
             })
@@ -204,7 +203,7 @@ export default {
       })
     },
     handleStatus (row) {
-      this.dialogTitle = row.Instance+' 任务状态'
+      this.dialogTitle = row.Instance+' 实例状态'
       basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
@@ -218,7 +217,7 @@ export default {
       })
     },
     handleDetail (row) {
-      this.dialogTitle = row.Instance+ ' 任务信息'
+      this.dialogTitle = row.Instance+ ' 实例信息'
       basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
@@ -245,75 +244,99 @@ export default {
       })
     },
     handleDeleteData (row) {
-      this.$confirm('是否删除该任务数据？', '提示', {
+      this.$confirm('是否删除 '+ row.Instance+' 该实例数据？', '提示', {
         type: 'warning'
       }).then(() => {
+        this.loading = true;
+        this.buttonDisabled = true;
         basicApi.efm_doaction({
           ac: 'deleteInstanceData',
           instance: row.Instance
         }).then(res => {
+          this.loading = false;
+          this.buttonDisabled = false;
           this.$notify({
             title: '成功',
-            message: '删除成功',
+            message: '删除 '+ row.Instance+' 实例数据成功!',
             duration: 15000
           })
         })
       })
     },
     handleDelete (row) {
-        this.$confirm('是否删除该任务？', '提示', {
+        this.$confirm('是否删除 '+ row.Instance+' 该实例任务？', '提示', {
             type: 'warning'
           }).then(() => {
+          this.loading = true;
+          this.buttonDisabled = true;
           basicApi.efm_doaction({
               ac: 'removeInstance',
               instance: row.Instance
             }).then(res => {
-              this.$notify({
+            this.loading = false;
+            this.buttonDisabled = false;
+            this.$notify({
                 title: '成功',
-                message: '删除成功',
+                message: '删除 '+ row.Instance+' 实例任务成功!',
                 duration: 15000
               })
             })
           })
         },
     handleRun (row) {
+      this.loading = true;
+      this.buttonDisabled = true;
       basicApi.efm_doaction({
         ac: 'runNow',
         instance: row.Instance,
         jobtype: 'increment'
       }).then(res => {
+        this.loading = false;
+        this.buttonDisabled = false;
         this.$notify({
           title: '成功',
-          message: '运行增量任务成功',
+          message: '运行 '+ row.Instance+' 实例增量任务成功!',
           type: 'success',
           duration: 15000
         })
       })
     },
     handleReload (row) {
+      this.$confirm('是否重载 '+ row.Instance+' 该实例？', '提示', {
+        type: 'warning'
+      }).then(() => {
+      this.loading = true;
+      this.buttonDisabled = true;
       basicApi.efm_doaction({
          ac: 'reloadinstance',
          instance: row.Instance,
          reset:'false',
          runtype: '-1'
        }).then(res => {
+        this.loading = false;
+        this.buttonDisabled = false;
          this.$notify({
            title: '成功',
-           message: '任务重载成功',
+           message: '实例 '+ row.Instance+' 重载成功!',
            type: 'success',
-           duration: 15000
+           duration: 30000
          })
        })
-     },
+      })
+    },
     handleRunFull (row) {
+      this.loading = true;
+      this.buttonDisabled = true;
       basicApi.efm_doaction({
         ac: 'runNow',
         instance: row.Instance,
         jobtype: 'full'
       }).then(res => {
+        this.loading = false;
+        this.buttonDisabled = false;
         this.$notify({
           title: '成功',
-          message: '运行全量任务成功',
+          message: '运行 '+ row.Instance+' 实例全量任务成功!',
           type: 'success',
           duration: 15000
         })
@@ -327,7 +350,7 @@ export default {
       }).then(res => {
         this.$notify({
           title: '成功',
-          message: '恢复增量任务成功',
+          message: '恢复 '+ row.Instance+' 实例增量任务成功!',
           type: 'success',
           duration: 15000
         })
@@ -341,37 +364,45 @@ export default {
       }).then(res => {
         this.$notify({
           title: '成功',
-          message: '恢复全量任务成功',
+          message: '恢复 '+ row.Instance+' 实例全量任务成功!',
           type: 'success',
           duration: 15000
         })
       })
     },
     handleStop (row) {
+      this.loading = true;
+      this.buttonDisabled = true;
       basicApi.efm_doaction({
         ac: 'stopInstance',
         instance: row.Instance,
         type: 'increment'
       }).then(res => {
+        this.loading = false;
+        this.buttonDisabled = false;
         this.$notify({
           title: '成功',
-          message: '停止增量任务成功',
+          message: '停止 '+ row.Instance+' 实例增量任务成功!',
           type: 'success',
           duration: 15000
         })
       })
     },
     handleStopFull (row) {
+      this.loading = true;
+      this.buttonDisabled = true;
       basicApi.efm_doaction({
         ac: 'stopInstance',
         instance: row.Instance,
         type: 'full'
       }).then(res => {
+        this.loading = false;
+        this.buttonDisabled = false;
         this.$notify({
           title: '成功',
-          message: '停止全量任务成功',
+          message: '停止 '+ row.Instance+' 实例全量任务成功!',
           type: 'success',
-          duration: 15000
+          duration: 30000
         })
       })
     },
@@ -387,10 +418,10 @@ export default {
       this.tableData = data
       this.page.total = data.length
     },
-    handleInstanceSearch(row){
-      this.dialogTitle = row.Instance+' 数据查询'
+    handleInstanceAnalyze(row){
+      this.dialogTitle = row.Instance+' 实例分析报告'
       basicApi.efm_doaction({
-        ac: 'searchInstanceData',
+        ac: 'analyzeInstance',
         instance: row.Instance
       }).then(res => {
         let data = res.response.datas
@@ -398,8 +429,19 @@ export default {
         this.visible = true
       })
     },
+    handleInstanceSearch(row){
+      this.dialogTitle = row.Instance+' 实例数据查询'
+      basicApi.efm_doaction({
+        ac: 'searchInstanceData',
+        instance: row.Instance
+      }).then(res => {
+        let data = res.response.datas
+        this.detail = this.syntaxHighlight(data)
+        this.visible = true
+      })
+    },
     handleConfig (row) {
-      this.dialogTitle = '修改 ' +row.Instance+' 任务配置'
+      this.dialogTitle = '修改 ' +row.Instance+' 实例配置'
       basicApi.efm_doaction({
         ac: 'getInstanceXml',
         instance: row.Instance
@@ -456,7 +498,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
-  height: 800px;
+  height: 550px;
 }
 ::v-deep .el-table .cell {
   white-space: nowrap;
@@ -464,7 +506,24 @@ export default {
 pre{
   white-space: pre-wrap;
 }
-.taskForm {
+.dialog-content {
+  overflow: auto;
+  max-height:550px;
+  line-height:25px;
+}
+::v-deep .el-dialog__body {
+  padding: 5px 20px 30px;
+}
+::v-deep .el-dialog__body h1{
+  font-size:15px;
+  line-height:35px;
+}
+::v-deep .el-dialog__body li{
+  list-style: square;
+  line-height: 25px;
+  padding-left: 14px;
+}
+  .taskForm {
   background: white;
   padding: 22px 50px 0 50px;
   margin-bottom: 15px;

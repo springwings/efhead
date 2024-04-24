@@ -1,7 +1,7 @@
 <template>
   <el-card>
   <div style="float:left;font-weight:bold;font-size:18px">
-  资源配置 > resource.xml
+     <router-link to="/resourcesStatus" class="router-link-exact-active router-link-active">资源配置</router-link> > resource.xml
   </div>
   <div class="flex flex-right">
     <el-button @click="handleEdit" style="width:150px" type="primary">更新资源</el-button>

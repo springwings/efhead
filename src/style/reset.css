@@ -202,7 +202,9 @@ button {
 td.key2 {
     min-width: 200px;
 }
-
+.router-link-active{
+    color: #409eff;
+}
 .string {
     color: #C80C0C;
 }

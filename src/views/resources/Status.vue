@@ -14,7 +14,7 @@
         <el-table-column prop="hosts" label="资源地址" :min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="pools" label="资源池状态" :min-width="250" show-overflow-tooltip>
           <template slot-scope="{ row }">
-            <div style="white-space: pre-wrap;">{{ JSON.stringify(row.pools, null, 2) }}</div>
+            <div style="white-space: pre-wrap;" v-html=" syntaxHighlight(row.pools)"></div>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="健康状态">
@@ -85,6 +85,29 @@ export default {
     handlePageSize (num) {
       this.page.index = 1
       this.page.size = num
+    },
+    syntaxHighlight (json) {
+      if (typeof json !== 'string') {
+        json = JSON.stringify(json, undefined, 2)
+      }
+      json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>')
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        function (match) {
+          var cls = 'number'
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'key'
+            } else {
+              cls = 'string'
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean'
+          } else if (/null/.test(match)) {
+            cls = 'null'
+          }
+          return '<span class="' + cls + '">' + match + '</span>'
+        }
+      )
     },
     handlePageIndex (num) {
       this.page.index = num

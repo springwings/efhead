@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div style="float:left;font-weight:bold;font-size:18px">
-       系统配置 > config.properties
+      <router-link to="/systemConfig">系统配置</router-link>  > config.properties
     </div>
     <div class="flex flex-right">
         <el-button  @click="handleEdit" style="width:150px" type="primary">更新配置</el-button>

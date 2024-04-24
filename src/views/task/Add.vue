@@ -1,5 +1,8 @@
 <template>
   <el-card >
+  <div style="font-weight:bold;font-size:18px;margin-bottom: 20px;padding-bottom: 15px;border-bottom: solid 1px #dedede;">
+    <router-link to="/taskList" class="router-link-exact-active router-link-active">实例管理</router-link> > 添加实例
+  </div>
   <div>
     <el-form ref="taskForm" label-width="120px" :model="formData" :rules="formRules">
       <el-form-item label="实例名称" prop="instance" class="task_label">
@@ -15,8 +18,9 @@
       </el-form-item>
       <form label="Content" prop="content">
         <codemirror v-model="formData.content" :options="cmOptions" style="margin-top:10px;"></codemirror>
-      </el-form-item>
-    </form>
+      </form>
+  </el-form-item>
+  </el-form>
   </div>
   </el-card >
 </template>
@@ -37,14 +41,14 @@ export default {
         instance: [
           {
             required: true,
-            message: '请输入Instance',
+            message: '请输入实例名称',
             trigger: 'blur'
           }
         ],
         level: [
           {
             required: true,
-            message: '请选择Level',
+            message: '请选择实例运行类型',
             type: 'array',
             trigger: 'change'
           }
@@ -52,7 +56,7 @@ export default {
         content: [
           {
             required: true,
-            message: '请输入Content',
+            message: '请输入实例信息',
             trigger: 'blur'
           }
         ]
@@ -124,7 +128,8 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
-  height: 500px;
+  height: 550px;
+  border: 1px solid #eee;
 }
 .task_label{
   font-weight: bold;
