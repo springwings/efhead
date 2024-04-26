@@ -5,7 +5,7 @@
           <el-input style="width: 300px" @keyup.native.enter="handleSearch" placeholder="请输入实例名称" @clear="handleSearch" v-model="search.Instance" clearable :maxlength="32"></el-input>
         </el-form-item>
         <el-button type="primary" @click="handleSearch" style="width: 120px">搜索</el-button>
-        <router-link style="float:right" to="/addTask" class="el-button el-button--success">添加实例任务</router-link>
+        <router-link style="float:right" to="/addInstance" class="el-button el-button--success">添加实例</router-link>
       </el-form>
       <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="Instance" label="实例名称" :min-width="150" show-overflow-tooltip></el-table-column>
@@ -30,29 +30,29 @@
         </el-table-column>
         <el-table-column prop="IsVirtualPipe" label="虚实例">
             <template slot-scope="{ row }">
-              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-star-on"></i>
-                <i v-else class="el-isclose el-icon-size el-icon-star-off"> </i>
+              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-success"></i>
+                <i v-else class="el-isclose el-icon-size el-icon-error"> </i>
             </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="读写">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-star-on"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-star-off"> </i>
+            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-success"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-error"> </i>
           </template>
         </el-table-column>
         <el-table-column prop="OpenTrans" label="计算">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-star-on"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-star-off"> </i>
+            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-success"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-error"> </i>
             </template>
         </el-table-column>
         <el-table-column prop="RunState" label="健康状态">
             <template slot-scope="{ row }">
-              <i v-if="row.RunState === true" class="el-isopen el-icon-size el-icon-check"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-close"></i>
+              <i v-if="row.RunState === true" class="el-issuccess el-icon-size el-icon-check"></i>
+            <i v-else class="el-isfailed el-icon-size el-icon-close"></i>
             </template>
         </el-table-column>
-        <el-table-column prop="Manage" label="实例管理" :min-width="180">
+        <el-table-column prop="Manage" label="实例任务管理" :min-width="180">
           <template slot-scope="{ row }">
             <div class="flex flex-around">
               <el-popover trigger="click">
@@ -537,11 +537,17 @@ pre{
 .el-icon-size{
   font-size:20px;
 }
-.el-isopen{
+.el-issuccess{
   color:#11a14c;
 }
-.el-icon-close{
+.el-isfailed{
   color:#c73a00;
+}
+.el-isopen{
+  color:#5eb59e;
+}
+.el-isclose{
+  color:#909399;
 }
 .cell .el-button{
   padding:6px 8px;

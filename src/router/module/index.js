@@ -10,9 +10,9 @@ const SysRoutes = [
     }
   },
   {
-    path: '/taskList',
-    name: 'taskList',
-    component: () => import('views/task/List.vue'),
+    path: '/instances',
+    name: 'instance',
+    component: () => import('views/instance/List.vue'),
     meta: {
       title: '实例管理',
       icon: 'el-icon-files',
@@ -30,9 +30,9 @@ const SysRoutes = [
     }
   },
   {
-    path: '/addTask',
+    path: '/addInstance',
     name: '',
-    component: () => import('views/task/Add.vue'),
+    component: () => import('views/instance/Add.vue'),
     meta: {
       title: '添加实例',
       icon: 'el-icon-folder-add',
@@ -66,6 +66,26 @@ const SysRoutes = [
     meta: {
       title: '资源配置',
       icon: 'el-icon-s-grid',
+      hidden: true
+    }
+  },
+  {
+    path: '/modules',
+    name: 'modules',
+    component: () => import('views/modules/Manage.vue'),
+    meta: {
+      title: '模块管理',
+      icon: 'el-icon-s-operation',
+      hidden: false
+    }
+  },
+  {
+    path: '/installInstance',
+    name: 'installInstance',
+    component: () => import('views/modules/Install.vue'),
+    meta: {
+      title: '实例安装',
+      icon: 'el-icon-setting',
       hidden: true
     }
   },

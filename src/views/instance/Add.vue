@@ -1,7 +1,7 @@
 <template>
   <el-card >
   <div style="font-weight:bold;font-size:18px;margin-bottom: 20px;padding-bottom: 15px;border-bottom: solid 1px #dedede;">
-    <router-link to="/taskList" class="router-link-exact-active router-link-active">实例管理</router-link> > 添加实例
+    <router-link to="/instances" class="router-link-exact-active router-link-active">实例管理</router-link> > 添加实例
   </div>
   <div>
     <el-form ref="taskForm" label-width="120px" :model="formData" :rules="formRules">
