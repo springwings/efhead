@@ -58,11 +58,12 @@
                   :label="item.label"
                   :value="item.value">
                 </el-option>
-              </el-select>
+              </el-select> {{formData.row.readfrom}}
             </el-form-item>
             <el-form-item v-if="formData.row.opencompute === false" label="计算端" prop="compute" class="task_label">
                  <el-input v-model="formData.compute" clearable placeholder="请输入计算端"></el-input>
-            </el-form-item>
+                {{formData.row.computeurl}}
+          </el-form-item>
             <el-form-item label="写端" prop="writeto" class="task_label">
               <el-select v-model="formData.writeto" placeholder="请选择写端">
                 <el-option
@@ -71,7 +72,7 @@
                   :label="item.label"
                   :value="item.value">
                 </el-option>
-              </el-select>
+              </el-select> {{formData.row.writeto}}
             </el-form-item>
             <pre class="dialog-content" v-html="detail"></pre>
             <el-button type="primary" :loading="loading" @click="handleSubmit" class="task_add">启动实例</el-button>
