@@ -80,16 +80,6 @@ const SysRoutes = [
     }
   },
   {
-    path: '/installInstance',
-    name: 'installInstance',
-    component: () => import('views/modules/Install.vue'),
-    meta: {
-      title: '实例安装',
-      icon: 'el-icon-setting',
-      hidden: true
-    }
-  },
-  {
     path: '/systemConfig',
     name: '',
     component: () => import('views/system/Config.vue'),
