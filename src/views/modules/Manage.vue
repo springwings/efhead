@@ -5,7 +5,6 @@
           <el-input style="width: 300px" @keyup.native.enter="handleSearch" placeholder="请输入模块名称" @clear="handleSearch" v-model="search.name" clearable :maxlength="32"></el-input>
         </el-form-item>
         <el-button type="primary" @click="handleSearch" style="width: 120px">搜索</el-button>
-        <router-link style="float:right" to="/addInstance" class="el-button el-button--success">导入模块</router-link>
       </el-form>
       <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="name" label="模块名称" show-overflow-tooltip></el-table-column>
@@ -45,6 +44,10 @@
           background>
         </el-pagination>
       </div>
+
+
+
+
     <el-dialog :top="dialogTop"  :title="dialogTitle" :visible.sync="visible" :close-on-click-modal="false">
         <el-form ref="instanceForm" label-width="120px" :model="formData" :rules="formRules">
             <el-form-item label="实例名称" prop="instancename" class="task_label">
