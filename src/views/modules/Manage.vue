@@ -60,9 +60,8 @@
                 </el-option>
               </el-select> {{formData.row.readfrom}}
             </el-form-item>
-            <el-form-item v-if="formData.row.opencompute === false" label="计算端" prop="compute" class="task_label">
-                 <el-input v-model="formData.compute" clearable placeholder="请输入计算端"></el-input>
-                {{formData.row.computeurl}}
+            <el-form-item v-if="formData.row.opencompute === true" label="计算端" prop="compute" class="task_label">
+                 <el-input v-model="formData.compute" clearable placeholder="请输入计算端"></el-input>{{formData.row.computeurl}}
           </el-form-item>
             <el-form-item label="写端" prop="writeto" class="task_label">
               <el-select v-model="formData.writeto" placeholder="请选择写端">
@@ -204,6 +203,7 @@ export default {
             message: '关闭 '+ row.name+' 模块实例成功!',
             duration: 15000
           })
+          this.getModuleList ()
         })
       })
     },
@@ -228,6 +228,7 @@ export default {
           })
         }).finally(() => {
           this.loading = false
+          this.getModuleList ()
         })
       })
     },handleConfig (row) {
