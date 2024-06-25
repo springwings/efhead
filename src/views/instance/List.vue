@@ -503,27 +503,39 @@ export default {
 ::v-deep .el-table .cell {
   white-space: nowrap;
 }
-pre{
+::v-deep pre{
   white-space: pre-wrap;
+  word-wrap: break-word;
+}
+::v-deep b{
+  color: #4aaba8;
+}
+::v-deep i{
+  color: #f12e2e;
 }
 .dialog-content {
   overflow: auto;
   max-height:550px;
   line-height:25px;
 }
+::v-deep .track_error{
+  background-color:#fff9f9;
+  padding:2px 8px;
+  font-size:12px;
+}
 ::v-deep .el-dialog__body {
   padding: 5px 20px 30px;
 }
 ::v-deep .el-dialog__body h1{
   font-size:15px;
-  line-height:35px;
+  line-height:55px;
 }
 ::v-deep .el-dialog__body li{
   list-style: square;
   line-height: 25px;
   padding-left: 14px;
 }
-  .taskForm {
+.taskForm {
   background: white;
   padding: 22px 50px 0 50px;
   margin-bottom: 15px;
@@ -552,4 +564,5 @@ pre{
 .cell .el-button{
   padding:6px 8px;
 }
+
 </style>
