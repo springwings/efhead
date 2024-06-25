@@ -19,8 +19,8 @@
         </el-table-column>
         <el-table-column prop="status" label="健康状态">
             <template slot-scope="{ row }">
-              <i v-if="row.status !== Normal" class="el-button--success is-circle padblock">{{ row.status }}</i>
-              <i v-else class="el-button--info is-circle padblock">{{ row.status }}</i>
+              <i v-if="row.status === 'Normal'" class="el-issuccess el-icon-size el-icon-check"></i>
+              <i v-else class="el-isfailed el-icon-size el-icon-close"></i>
             </template>
         </el-table-column>
       </el-table>
@@ -175,12 +175,18 @@ export default {
 ::v-deep .el-table .cell {
   white-space: nowrap;
 }
+::v-deep .el-icon-size{
+  font-size: 22px;
+}
 .taskForm {
   background: white;
   padding: 22px 50px 0 50px;
   margin-bottom: 15px;
 }
-.padblock{
-  padding:2px 5px;
+.el-isfailed{
+  color: #eb0707;
+}
+.el-issuccess{
+  color: #67c23a;
 }
 </style>
