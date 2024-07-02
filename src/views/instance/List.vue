@@ -61,8 +61,9 @@
                   <el-dropdown-item @click.native="handleStatus(row)">实例状态</el-dropdown-item>
                   <el-dropdown-item @click.native="handleDetail(row)">统计信息</el-dropdown-item>
                   <el-dropdown-item @click.native="handleConfig(row)">配置实例</el-dropdown-item>
-                  <el-dropdown-item @click.native="handleInstanceSearch(row)">数据查询</el-dropdown-item>
                   <el-dropdown-item @click.native="handleInstanceAnalyze(row)">分析报告</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleInstanceSearch(row)">数据查询</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleOpen(row)">搜索端状态</el-dropdown-item>
                 </ul>
               </el-popover>
               <el-popover  trigger="click">
@@ -428,6 +429,9 @@ export default {
         this.detail = data
         this.visible = true
       })
+    },
+    handleOpen(row){
+      window.open(row.QueryApi+"?count=1&__stats=true", '_blank');
     },
     handleInstanceSearch(row){
       this.dialogTitle = row.Instance+' 实例数据查询'

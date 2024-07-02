@@ -1,10 +1,15 @@
 <template>
     <el-card >
-    <div v-loading="loading" id="view_control" style="z-index:9999;font-size:12px;position:relative;top:30px;left:30px;width:300px;min-height:55px;">
-     <div style="float:left">
-     <a class="el-button el-button--success is-plain" @click="drawChart('circle')">环形图</a><br>
-     <a class="el-button el-button--primary is-plain" @click="drawChart('tree')">树形图</a>
-     </div>
+    <div v-loading="loading" id="view_control" style="z-index:9999;font-size:12px;position:relative;top:30px;left:30px;width:100%;min-height:55px;">
+      <div id="search_view" style="float:right;margin:10px 30px 0 0">
+          <el-input style="width:150px" v-model="trackField" placeholder="追踪的字段名" clearable :maxlength="32"></el-input><br>
+          <el-input style="width:150px" v-model="trackValue" placeholder="追踪的字段值" clearable :maxlength="32"></el-input><br>
+          <a class="el-button el-button--success" @click="track()">{{ trackButton }}</a>
+      </div>
+      <div style="float:left">
+         <a class="el-button el-button--success is-plain" @click="drawChart('circle')">环形图</a><br>
+         <a class="el-button el-button--primary is-plain" @click="drawChart('tree')">树形图</a>
+      </div>
         <div id="tree_view" style="display:none;float:left;margin:10px 0 0 10px ">
            <i class="el-icon-caret-right"></i> 箭头方向表示数据流向<br>
           <em class="color-block" style="background:#999"></em> 灰色表示是孤立节点<br>
@@ -29,7 +34,12 @@ import basicApi from '@/request/api/basic'
 export default {
     data () {
         return {
-          loading: true
+          loading: true,
+          trackField:"",
+          trackValue:"",
+          startTrack:false,
+          isProcessing: false,
+          trackButton:"开始追踪"
         }
     },
     mounted () {
@@ -41,6 +51,10 @@ export default {
       clearInterval(this.interval_ins2);
     },
     methods: {
+      track(){
+        this.startTrack = this.startTrack ? false : true
+        this.trackButton = this.startTrack ? "停止追踪" : "开始追踪"
+      },
       drawChart(type){
         this.loading = true
         clearInterval(this.interval_ins1);
@@ -63,11 +77,18 @@ export default {
      },
     schedulecircle(chart){
             this.handlecircle(chart)
-            this.interval_ins1 = setInterval(()=>{this.handlecircle(chart)},3000)
+            this.interval_ins1 = setInterval(()=>{
+              if (!this.isProcessing) {
+                this.handlecircle(chart);
+              } },3000)
         },
       handlecircle (chart) {
+        this.isProcessing = true
         basicApi.efm_doaction({
-                ac: 'instanceflowgraph'
+                ac: 'instanceflowgraph',
+                track: this.startTrack,
+                track_field: this.trackField,
+                track_value: this.trackValue,
             }).then(res => {
                 const data = res.response.datas
                 const categories = [
@@ -110,6 +131,7 @@ export default {
                 this.$nextTick(() => {
                     this.drawcircle(graph,chart)
                 })
+                this.isProcessing = false
             })
         },
         drawcircle (graph,chart) {
@@ -158,11 +180,19 @@ export default {
         },
         scheduletree(chart){
             this.handletree(chart)
-            this.interval_ins2 = setInterval(()=>{this.handletree(chart)},3000)
+            this.interval_ins2 = setInterval(()=>{
+              if (!this.isProcessing) {
+                this.handletree(chart);
+              } },3000)
         },
       handletree (chart) {
+        this.isProcessing = true
+        this.trackButton = this.startTrack ? "停止追踪" : "开始追踪"
         basicApi.efm_doaction({
-                ac: 'instanceflowgraph'
+                ac: 'instanceflowgraph',
+                track: this.startTrack,
+                track_field: this.trackField,
+                track_value: this.trackValue,
             }).then(res => {
                 const data = res.response.datas
                 const categories = [
@@ -291,6 +321,7 @@ export default {
                 this.$nextTick(() => {
                     this.drawtree(treeData, graph,chart)
                 })
+                this.isProcessing = false
             })
         },
       drawtree (treeData, graph,chart) {
