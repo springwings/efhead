@@ -287,8 +287,12 @@ export default {
                         category: parentNode.category,
                         label: lineLabel,
                         symbol: isconnect ? "arrow":"rect",
+                        lineStyle: {
+                          type: isconnect ? 'solid' : 'dashed',
+                          color: isconnect ? '#197700' : '#aa1a12',
+                        },
                         itemStyle: { color: isconnect ? '#197700' : '#aa1a12'},
-                        symbolSize: isconnect? 8:12,
+                        symbolSize: isconnect? 8:10,
                         symbolRotate: -90,
                         children: [
                             {
