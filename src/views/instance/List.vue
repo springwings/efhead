@@ -58,7 +58,7 @@
               <el-popover trigger="click">
                 <el-button slot="reference" type="success" >信息管理</el-button>
                 <ul>
-                  <el-dropdown-item @click.native="handleStatus(row)">实例状态</el-dropdown-item>
+                  <el-dropdown-item @click.native="handleStatus(row)">运行状态</el-dropdown-item>
                   <el-dropdown-item @click.native="handleDetail(row)">统计信息</el-dropdown-item>
                   <el-dropdown-item @click.native="handleConfig(row)">配置实例</el-dropdown-item>
                   <el-dropdown-item @click.native="handleInstanceAnalyze(row)">分析报告</el-dropdown-item>
@@ -204,7 +204,7 @@ export default {
       })
     },
     handleStatus (row) {
-      this.dialogTitle = row.Instance+' 实例状态'
+      this.dialogTitle = row.Instance+' 实例运行状态'
       basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance
@@ -218,7 +218,7 @@ export default {
       })
     },
     handleDetail (row) {
-      this.dialogTitle = row.Instance+ ' 实例信息'
+      this.dialogTitle = row.Instance+ ' 实例统计信息'
       basicApi.efm_doaction({
         ac: 'getInstanceInfo',
         instance: row.Instance

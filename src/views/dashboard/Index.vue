@@ -250,8 +250,8 @@ export default {
         writer.reverse()
         computer.reverse()
         dateinfo.reverse()
-        this.drawHistory(this.chart,reader,writer,computer,dateinfo)
         this.loading = false
+        this.drawHistory(this.chart,reader,writer,computer,dateinfo)
       })
     }
   },

@@ -72,7 +72,7 @@ const SysRoutes = [
   {
     path: '/modules',
     name: 'modules',
-    component: () => import('views/modules/Manage.vue'),
+    component: () => import('views/modules/modules.vue'),
     meta: {
       title: '模块管理',
       icon: 'el-icon-s-operation',

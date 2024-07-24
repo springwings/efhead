@@ -28,8 +28,9 @@
         <el-table-column prop="Manage" label="模块管理" :min-width="150">
           <template slot-scope="{ row }">
             <el-button title="启用实例" v-if="row.enable === false" type="primary" @click.native="handleOpen(row)">启用</el-button>
-            <el-button title="关闭实例" v-if="row.enable === true" type="danger" @click.native="handleClose(row)">关闭</el-button>
-            <el-button title="修改模块配置" type="primary" @click.native="handleConfig(row)">修改模块</el-button>
+            <el-button title="停止实例" v-if="row.enable === true" type="warning" @click.native="handleClose(row)">停止</el-button>
+            <el-button title="修改模块配置" type="primary" @click.native="handleConfig(row)">修改</el-button>
+            <el-button title="卸载模块" type="danger" @click.native="unload(row)">卸载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -246,6 +247,27 @@ export default {
         this.showXML = true
       })
     },
+    unload (row) {
+    this.$confirm('是否卸载 '+ row.name+' 模块(将清除该模块)？', '提示', {
+      type: 'warning'
+    }).then(() => {
+      this.loading = true;
+      this.buttonDisabled = true;
+      basicApi.efm_doaction({
+        ac: 'unloadModule',
+        module: row.name
+      }).then(res => {
+        this.loading = false;
+        this.buttonDisabled = false;
+        this.$notify({
+          title: '成功',
+          message: '卸载 '+ row.name+' 模块成功!',
+          duration: 15000
+        })
+        this.getModuleList ()
+      })
+    })
+  },
     handleOpen (row) {
       this.formData.row = row
       this.formData.instancename = row.name
