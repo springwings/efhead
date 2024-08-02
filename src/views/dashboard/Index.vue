@@ -37,7 +37,7 @@
 </el-row>
   <el-row :gutter="20">
    <el-col :span="8">
-    <div class="grid-content" style="min-height:300px;padding:0 15px"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px 0;">系统告警信息监控</p>
+    <div class="grid-content" style="min-height:300px;padding:0 15px"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px 0;"><i class="el-icon-message-solid"></i> 集群告警信息监控</p>
       <div class="el-table__header-wrapper">
       <table  class="waring_table">
       <tbody>
@@ -78,7 +78,7 @@
      </div></el-col>
 
     <el-col :span="8">
-    <div class="grid-content" style="min-height:25px;color:rgb(16 167 162);font-size:18px;"><p style="padding:20px;">集群使用资源监控</p></div>
+    <div class="grid-content" style="min-height:25px;font-size:18px;"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px;"><i class="el-icon-s-promotion"></i> 集群使用资源监控</p></div>
     <div class="grid-content usage_progress"  style="min-height:45px;">
       CPU使用率
       <el-progress

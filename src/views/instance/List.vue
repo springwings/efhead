@@ -10,7 +10,7 @@
       <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
         <el-table-column prop="Instance" label="实例名称" :min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="Remark" label="说明" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="Alias" label="实例别名" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Nodes" label="工作节点" show-overflow-tooltip></el-table-column>
         <el-table-column prop="FullCron" label="全量定时" show-overflow-tooltip></el-table-column>
         <el-table-column prop="DeltaCron" label="增量定时" show-overflow-tooltip></el-table-column>
         <el-table-column prop="ReadFrom" label="读取端" show-overflow-tooltip>
@@ -28,28 +28,28 @@
           <el-button type="text" @click.native="searchResource(row.SearchFrom)">{{ row.SearchFrom }}</el-button>
         </template>
         </el-table-column>
-        <el-table-column prop="IsVirtualPipe" label="虚实例">
+        <el-table-column prop="IsVirtualPipe" :width="65" title="11" label="虚实例">
             <template slot-scope="{ row }">
-              <i v-if="row.IsVirtualPipe === true" class="el-isopen el-icon-size el-icon-success"></i>
-                <i v-else class="el-isclose el-icon-size el-icon-error"> </i>
+              <i v-if="row.IsVirtualPipe === true" class="el-issuccess">是</i>
+                <i v-else class="el-isclose">否</i>
             </template>
         </el-table-column>
-        <el-table-column prop="OpenTrans" label="读写">
+        <el-table-column prop="OpenTrans" :width="50" label="读写">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenTrans === true" class="el-isopen el-icon-size el-icon-success"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-error"> </i>
+            <i v-if="row.OpenTrans === true" title="开启" class="el-isopen el-icon-size el-icon-success"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-error" title="关闭"> </i>
           </template>
         </el-table-column>
-        <el-table-column prop="OpenTrans" label="计算">
+        <el-table-column prop="OpenTrans" :width="50" label="计算">
           <template slot-scope="{ row }">
-            <i v-if="row.OpenCompute === true" class="el-isopen el-icon-size el-icon-success"></i>
-            <i v-else class="el-isclose el-icon-size el-icon-error"> </i>
+            <i v-if="row.OpenCompute === true" title="开启" class="el-isopen el-icon-size el-icon-success"></i>
+            <i v-else class="el-isclose el-icon-size el-icon-error" title="关闭"> </i>
             </template>
         </el-table-column>
-        <el-table-column prop="RunState" label="健康状态">
+        <el-table-column prop="RunState" :width="70" label="健康状态" >
             <template slot-scope="{ row }">
-              <i v-if="row.RunState === true" class="el-issuccess el-icon-size el-icon-check"></i>
-            <i v-else class="el-isfailed el-icon-size el-icon-close"></i>
+              <i v-if="row.RunState === true" title="正常" class="el-issuccess el-icon-size el-icon-check"></i>
+            <i v-else class="el-isfailed el-icon-size el-icon-close" title="异常"></i>
             </template>
         </el-table-column>
         <el-table-column prop="Manage" label="实例任务管理" :min-width="180">
