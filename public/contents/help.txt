@@ -27,3 +27,7 @@
 7 kafka资源端的实例如何查询？
 - 注：端口为搜索端口，test_kafka为实例名称
 . 1）通过content查询：(GET)  http://localhost:[8090]/test_kafka?content=test
+
+8 配置数据扫描类任务时，扫描的数据有缺失，如何解决？
+- 扫描具体页面数据SQL注意 >= '#{start_time}'，防止在某个时间点有多条时，扫描某一页时丢失数据
+- 分页SQL要使用 > '#{start_time}'，防止陷入不断重复扫描同一位置。

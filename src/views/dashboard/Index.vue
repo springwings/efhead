@@ -76,22 +76,16 @@
       </el-table>
     </template>
      </div></el-col>
-
     <el-col :span="8">
     <div class="grid-content" style="min-height:25px;font-size:18px;"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px;"><i class="el-icon-s-promotion"></i> 集群使用资源监控</p></div>
     <div class="grid-content usage_progress"  style="min-height:45px;">
       CPU使用率
-      <el-progress
-    v-if="summary_data.cpu_usage"
-      :percentage="summary_data.cpu_usage"
-    :class="progressStatus(summary_data.cpu_usage)"
+      <el-progress v-if="summary_data.cpu_usage" :percentage="summary_data.cpu_usage" :class="progressStatus(summary_data.cpu_usage)"
       ></el-progress>
       </div>
       <div class="grid-content usage_progress" style="min-height:45px;">
       内存使用率
-        <el-progress
-      v-if="summary_data.memory_usage"
-        :percentage="summary_data.memory_usage"
+        <el-progress v-if="summary_data.memory_usage" :percentage="summary_data.memory_usage"
       :class="progressStatus(summary_data.memory_usage)"
         ></el-progress>
      </div>

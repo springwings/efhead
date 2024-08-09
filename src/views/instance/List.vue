@@ -420,6 +420,7 @@ export default {
       this.page.total = data.length
     },
     handleInstanceAnalyze(row){
+      this.loading = true;
       this.dialogTitle = row.Instance+' 实例分析报告'
       basicApi.efm_doaction({
         ac: 'analyzeInstance',
@@ -428,6 +429,7 @@ export default {
         let data = res.response.datas
         this.detail = data
         this.visible = true
+        this.loading = false;
       })
     },
     handleOpen(row){
