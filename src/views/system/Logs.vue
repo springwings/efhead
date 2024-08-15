@@ -21,6 +21,8 @@
   <script>
 import basicApi from '@/request/api/basic'
 import { Base64 } from '@/utils/Base64'
+import 'codemirror/theme/eclipse.css'
+import 'codemirror/mode/javascript/javascript.js';
 
 export default {
   data () {
@@ -33,8 +35,8 @@ export default {
       autofresh: true,
       cmOptions: {
         tabSize: 4,
-        mode: 'text/javascript',
-        theme: 'paraiso-light',
+        mode: 'javascript',
+        theme: 'eclipse',
         lineNumbers: true,
         line: true,
         matchBrackets: true,
