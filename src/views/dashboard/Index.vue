@@ -214,6 +214,7 @@ export default {
           {conf_name: '管理后台代理',conf_value: this.summary_data.proxy_ip},
           {conf_name: '系统配置路径',conf_value: this.summary_data.sys_config_path},
           {conf_name: '系统数据路径',conf_value: this.summary_data.datas_config_path},
+          {conf_name: '系统日志路径',conf_value: this.summary_data.log_store_path},
           {conf_name: '插件路径',conf_value: this.summary_data.plugin_path}]
         var reader = []
         var writer = []

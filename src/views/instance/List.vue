@@ -8,11 +8,23 @@
         <router-link style="float:right" to="/addInstance" class="el-button el-button--success">添加实例</router-link>
       </el-form>
       <el-table v-loading="loading" stripe :header-cell-style="{ background: '#ddd', color: '#333' }" :data="tableData.slice((page.index - 1) * page.size, page.size * page.index)" border>
-        <el-table-column prop="Instance" label="实例名称" :min-width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Instance" label="实例名称" :min-width="150" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <i class="el-isnormal">{{row.Instance}}</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="Remark" label="说明" show-overflow-tooltip></el-table-column>
         <el-table-column prop="Nodes" label="工作节点" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="FullCron" label="全量定时" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="DeltaCron" label="增量定时" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="FullCron" label="全量定时" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+              <i :class="row.FullCron==='未配置' ? 'el-isclose' : 'el-isnormal'">{{row.FullCron}}</i>
+          </template>
+        </el-table-column>
+        <el-table-column prop="DeltaCron" label="增量定时" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <i :class="row.DeltaCron==='未配置' ? 'el-isclose' : 'el-isnormal'">{{row.DeltaCron}}</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="ReadFrom" label="读取端" show-overflow-tooltip>
           <template slot-scope="{ row }">
              <el-button type="text" @click.native="searchResource(row.ReadFrom)">{{ row.ReadFrom }}</el-button>
@@ -531,6 +543,9 @@ export default {
 }
 ::v-deep .el-dialog__body {
   padding: 5px 20px 30px;
+}
+::v-deep .el-isnormal{
+  color: #333;
 }
 ::v-deep .el-dialog__body h1{
   font-size:15px;

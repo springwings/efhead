@@ -90,6 +90,16 @@ const SysRoutes = [
     }
   },
   {
+    path: '/systemLogs',
+    name: '',
+    component: () => import('views/system/Logs.vue'),
+    meta: {
+      title: '日志跟踪',
+      icon: 'el-icon-document',
+      hidden: false
+    }
+  },
+  {
     path: '/systemHelp',
     name: '',
     component: () => import('views/system/Help.vue'),
