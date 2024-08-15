@@ -130,6 +130,9 @@ export default {
       }
     }
   },
+  beforeDestroy() {
+    this.stopLogPolling();
+  },
   created () {
     this.gethosts(),
     this.startLogPolling()
