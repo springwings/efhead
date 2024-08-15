@@ -18,11 +18,34 @@
   </el-card >
   </template>
 
-  <script>
+<script>
+import CodeMirror from 'codemirror';
 import basicApi from '@/request/api/basic'
 import { Base64 } from '@/utils/Base64'
 import 'codemirror/theme/eclipse.css'
-import 'codemirror/mode/javascript/javascript.js';
+
+CodeMirror.defineMode('custom', function() {
+  return {
+    token: function(stream, state) {
+      if (stream.match(/(?:\b|\W)(INFO)(?:\b|\W)/i)) {
+        return 'info';
+      }
+      if (stream.match(/(?:\b|\W)(SUCCESS)(?:\b|\W)/i)) {
+        return 'success';
+      }
+      if (stream.match(/(?:\b|\W)(WARN|warning)(?:\b|\W)/i)) {
+        return 'warn';
+      }
+      if (stream.match(/(?:\b|\W)(ERROR|efexception|exception|failed)(?:\b|\W)/i)) {
+        return 'error';
+      }
+      stream.next();
+      return null;
+    }
+  };
+});
+
+CodeMirror.defineMIME('text/x-custom', 'custom');
 
 export default {
   data () {
@@ -35,12 +58,12 @@ export default {
       autofresh: true,
       cmOptions: {
         tabSize: 4,
-        mode: 'javascript',
+        mode: 'text/x-custom',
         theme: 'eclipse',
         lineNumbers: true,
         line: true,
         matchBrackets: true,
-        lineWrapping: true
+        lineWrapping: true,
       }
     }
   },
@@ -117,5 +140,17 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
   height: 600px;
+}
+::v-deep .CodeMirror .cm-success {
+  color: #2fb300;
+}
+::v-deep .CodeMirror .cm-info {
+  color: #3372b5;
+}
+::v-deep .CodeMirror .cm-warn {
+  color: #d7a100;
+}
+::v-deep .CodeMirror .cm-error {
+  color: red;
 }
 </style>
