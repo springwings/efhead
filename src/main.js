@@ -11,6 +11,25 @@ import 'codemirror/mode/xml/xml.js'
 
 Vue.use(ElementUI)
 Vue.use(VueCodemirror, 'codemirror')
+Vue.prototype.$process_state = (obj,message,res) => {
+  if (res.status === 0) {
+    obj.$notify({
+      title: '成功',
+      message: message,
+      duration: 6000,
+      type: 'success',
+      iconClass: 'el-icon-check'
+    });
+  } else {
+    obj.$notify({
+      title: '失败',
+      message: res.info || '失败，请重试',
+      duration: 6000,
+      type: 'error',
+      iconClass: 'el-icon-error'
+    });
+  }
+}
 
 Vue.config.productionTip = false
 

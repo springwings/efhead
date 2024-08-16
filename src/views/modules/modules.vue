@@ -182,12 +182,7 @@ export default {
       }).then(res => {
         this.edit_instance = {}
         this.showXML = false
-        this.$notify({
-          title: '成功',
-          message: '保存成功',
-          type: 'success',
-          duration: 6000
-        })
+        this.$process_state(this,'保存 '+ this.edit_instance.instance+' 模块配置成功!',res)
       })
     },
     handleClose (row) {
@@ -202,11 +197,7 @@ export default {
         }).then(res => {
           this.loading = false;
           this.buttonDisabled = false;
-          this.$notify({
-            title: '成功',
-            message: '关闭 '+ row.name+' 模块实例成功!',
-            duration: 15000
-          })
+          this.$process_state(this,'关闭 '+ row.name+' 模块实例成功!',res)
           this.getModuleList ()
         })
       })
@@ -224,12 +215,7 @@ export default {
         delete data.readsource;
         delete data.writesource;
         basicApi.efm_doaction_post(data).then(res => {
-          this.$notify({
-            title: '成功',
-            message: '添加任务成功',
-            type: 'success',
-            duration: 6000
-          })
+          this.$process_state(this,'添加 '+data.row.name+' 任务成功!',res)
         }).finally(() => {
           this.loading = false
           this.getModuleList ()
@@ -259,11 +245,7 @@ export default {
       }).then(res => {
         this.loading = false;
         this.buttonDisabled = false;
-        this.$notify({
-          title: '成功',
-          message: '卸载 '+ row.name+' 模块成功!',
-          duration: 15000
-        })
+        this.$process_state(this,'卸载 '+ row.name+' 模块成功!',res)
         this.getModuleList ()
       })
     })

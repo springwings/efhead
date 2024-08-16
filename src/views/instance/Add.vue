@@ -108,12 +108,7 @@ export default {
         })
         data.content = base64.encode(data.content)
         basicApi.efm_doaction_post(data).then(res => {
-          this.$notify({
-            title: '成功',
-            message: '添加任务成功',
-            type: 'success',
-            duration: 6000
-          })
+          this.$process_state(this,"添加任务成功！",res)
           setTimeout(() => {
             this.$router.push('/taskList')
           }, 9000)

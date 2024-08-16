@@ -173,11 +173,7 @@ export default {
           ac: 'resetInstanceState',
           instance: row.Instance
         }).then(res => {
-          this.$notify({
-            title: '成功',
-            message: '重置成功',
-            duration: 15000
-          })
+          this.$process_state(this,'重置 '+row.Instance+' 任务状态成功！',res)
         })
       })
     },
@@ -189,12 +185,7 @@ export default {
               ac: 'resetBreaker',
               instance: row.Instance
             }).then(res => {
-              this.$notify({
-                title: '成功',
-                message: '重置成功',
-                type: 'success',
-                duration: 15000
-              })
+              this.$process_state(this,'重置 '+row.Instance+' 断路器成功！',res)
             })
           })
         },
@@ -207,12 +198,7 @@ export default {
       }).then(res => {
         this.edit_instance = {}
         this.showXML = false
-        this.$notify({
-          title: '成功',
-          message: '保存成功',
-          type: 'success',
-          duration: 6000
-        })
+        this.$process_state(this,'保存 '+this.edit_instance.instance+' 配置成功！',res)
       })
     },
     handleStatus (row) {
@@ -268,11 +254,7 @@ export default {
         }).then(res => {
           this.loading = false;
           this.buttonDisabled = false;
-          this.$notify({
-            title: '成功',
-            message: '删除 '+ row.Instance+' 实例数据成功!',
-            duration: 15000
-          })
+          this.$process_state(this,'删除 '+ row.Instance+' 实例数据成功!',res)
         })
       })
     },
@@ -288,11 +270,7 @@ export default {
             }).then(res => {
             this.loading = false;
             this.buttonDisabled = false;
-            this.$notify({
-                title: '成功',
-                message: '删除 '+ row.Instance+' 实例任务成功!',
-                duration: 15000
-              })
+            this.$process_state(this,'删除 '+ row.Instance+' 实例任务成功!',res)
             })
           })
         },
@@ -306,12 +284,7 @@ export default {
       }).then(res => {
         this.loading = false;
         this.buttonDisabled = false;
-        this.$notify({
-          title: '成功',
-          message: '运行 '+ row.Instance+' 实例增量任务成功!',
-          type: 'success',
-          duration: 15000
-        })
+        this.$process_state(this,'运行 '+ row.Instance+' 实例增量任务成功!',res)
       })
     },
     handleReload (row) {
@@ -328,12 +301,7 @@ export default {
        }).then(res => {
         this.loading = false;
         this.buttonDisabled = false;
-         this.$notify({
-           title: '成功',
-           message: '实例 '+ row.Instance+' 重载成功!',
-           type: 'success',
-           duration: 30000
-         })
+        this.$process_state(this,'实例 '+ row.Instance+' 重载成功!',res)
        })
       })
     },
@@ -347,12 +315,7 @@ export default {
       }).then(res => {
         this.loading = false;
         this.buttonDisabled = false;
-        this.$notify({
-          title: '成功',
-          message: '运行 '+ row.Instance+' 实例全量任务成功!',
-          type: 'success',
-          duration: 15000
-        })
+        this.$process_state(this,'运行 '+ row.Instance+' 实例全量任务成功!',res)
       })
     },
     handleResume (row) {
@@ -361,12 +324,7 @@ export default {
         instance: row.Instance,
         type: 'increment'
       }).then(res => {
-        this.$notify({
-          title: '成功',
-          message: '恢复 '+ row.Instance+' 实例增量任务成功!',
-          type: 'success',
-          duration: 15000
-        })
+        this.$process_state(this,'恢复 '+ row.Instance+' 实例增量任务成功!',res)
       })
     },
     handleResumeFull (row) {
@@ -375,12 +333,7 @@ export default {
         instance: row.Instance,
         type: 'full'
       }).then(res => {
-        this.$notify({
-          title: '成功',
-          message: '恢复 '+ row.Instance+' 实例全量任务成功!',
-          type: 'success',
-          duration: 15000
-        })
+        this.$process_state(this,'恢复 '+ row.Instance+' 实例全量任务成功!',res)
       })
     },
     handleStop (row) {
@@ -393,12 +346,7 @@ export default {
       }).then(res => {
         this.loading = false;
         this.buttonDisabled = false;
-        this.$notify({
-          title: '成功',
-          message: '停止 '+ row.Instance+' 实例增量任务成功!',
-          type: 'success',
-          duration: 15000
-        })
+        this.$process_state(this,'停止 '+ row.Instance+' 实例增量任务成功!',res)
       })
     },
     handleStopFull (row) {
@@ -411,12 +359,7 @@ export default {
       }).then(res => {
         this.loading = false;
         this.buttonDisabled = false;
-        this.$notify({
-          title: '成功',
-          message: '停止 '+ row.Instance+' 实例全量任务成功!',
-          type: 'success',
-          duration: 30000
-        })
+        this.$process_state(this,'停止 '+ row.Instance+' 实例全量任务成功!',res)
       })
     },
     handleSearch () {

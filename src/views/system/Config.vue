@@ -48,12 +48,7 @@ export default {
         ac: 'updateNodeConfigContent',
         content: base64.encode(this.code)
       }).then(res => {
-        this.$notify({
-          title: '成功',
-          message: '保存成功',
-          type: 'success',
-          duration: 6000
-        })
+        this.$process_state(this,'保存节点配置成功！',res)
       })
     }
   },

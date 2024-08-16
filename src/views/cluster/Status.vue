@@ -185,11 +185,7 @@ export default {
           ac:acmethod,
           node_id:node_id
         }).then(res => {
-          this.$notify({
-            title: '成功',
-            message: '执行成功',
-            duration: 15000
-          })
+          this.$process_state(this,"节点重启成功！",res)
         })
       })
     },
@@ -200,11 +196,7 @@ export default {
         basicApi.efm_doaction({
           ac:acmethod
         }).then(res => {
-          this.$notify({
-            title: '成功',
-            message: '执行成功',
-            duration: 15000
-          })
+          this.$process_state(this,"集群重启成功！",res)
         })
       })
     },

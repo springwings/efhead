@@ -47,12 +47,7 @@ export default {
         ac: 'updateResource',
         content: base64.encode(this.code)
       }).then(res => {
-        this.$notify({
-          title: '成功',
-          message: '保存成功',
-          type: 'success',
-          duration: 6000
-        })
+        this.$process_state(this,'保存资源配置成功！',res)
       })
     }
   },
