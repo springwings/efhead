@@ -48,6 +48,7 @@ export default {
         content: base64.encode(this.code)
       }).then(res => {
         this.$process_state(this,'保存资源配置成功！',res)
+        this.getXML()
       })
     }
   },

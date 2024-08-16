@@ -123,6 +123,7 @@ export default {
         ac: 'clearSystemWarning'
       }).then(res => {
         this.$process_state(this,'重置成功!',res)
+        this.getSumaryData()
       })
     },
     drawHistory(chart,reader,writer,computer,dateinfo){
@@ -258,7 +259,6 @@ export default {
       })
     }
   },
-
   created () {
     this.getSumaryData()
   }

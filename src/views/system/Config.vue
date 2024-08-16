@@ -68,6 +68,7 @@ export default {
           content: base64.encode(this.code)
         }).then(res => {
           this.$process_state(this,'保存 '+this.fname+' 配置成功！',res)
+          this.getXML()
         })
       }else {
         basicApi.efm_doaction_post({
