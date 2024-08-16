@@ -219,3 +219,7 @@ td.key2 {
     line-height: 20px;
     font-size: 14px;
 }
+button:disabled {
+    opacity: 0.5; /* 设置透明度为 0.5，值可以根据需求调整 */
+    cursor: not-allowed; /* 光标显示为禁止状态 */
+}

@@ -1,9 +1,12 @@
 <template>
   <el-card>
     <div style="float:left;font-weight:bold;font-size:18px">
-      <router-link to="/systemConfig">系统配置</router-link>  > config.properties
+      <router-link to="/systemConfig">配置管理</router-link>  > {{this.fname}}
     </div>
     <div class="flex flex-right">
+    <el-select style="width: 300px" @change="handleFile" placeholder="请选择配置文件,默认config.properties" v-model="fname" clearable>
+       <el-option v-for="fname in configfiles"  :key="fname"  :label="fname"  :value="fname"></el-option>
+    </el-select>
         <el-button  @click="handleEdit" style="width:150px" type="primary">更新配置</el-button>
     </div>
   </div>
@@ -20,7 +23,8 @@ import { Base64 } from '@/utils/Base64'
 export default {
   data () {
     return {
-      tableData: [],
+      configfiles: ["config.properties","log4j.properties","mail.properties"],
+      fname: "config.properties",
       code: '',
       cmOptions: {
         tabSize: 4,
@@ -42,15 +46,37 @@ export default {
         this.code = typeof data === 'string' ? data : ''
       })
     },
+    handleFile(){
+      if (this.fname === "config.properties"){
+        this.getXML()
+      }else {
+        basicApi.efm_doaction({
+          ac: 'getPropertyFile',
+          fname: this.fname
+        }).then(res => {
+          this.code = res.response.datas
+        })
+      }
+    },
     handleEdit () {
       let base64 = new Base64()
-      basicApi.efm_doaction_post({
-        ac: 'updateNodeConfigContent',
-        content: base64.encode(this.code)
-      }).then(res => {
-        this.$process_state(this,'保存节点配置成功！',res)
-      })
-    }
+      if (this.fname === "config.properties"){
+        basicApi.efm_doaction_post({
+          ac: 'updateNodeConfigContent',
+          content: base64.encode(this.code)
+        }).then(res => {
+          this.$process_state(this,'保存 '+this.fname+' 配置成功！',res)
+        })
+      }else {
+        basicApi.efm_doaction_post({
+          ac: 'updatePropertyFile',
+          fname: this.fname,
+          content: this.code
+        }).then(res => {
+          this.$process_state(this,'保存 '+this.fname+' 配置成功！',res)
+        })
+      }
+      }
   },
   created () {
     this.getXML()

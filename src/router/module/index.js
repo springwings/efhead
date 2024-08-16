@@ -84,7 +84,7 @@ const SysRoutes = [
     name: '',
     component: () => import('views/system/Config.vue'),
     meta: {
-      title: '系统配置',
+      title: '配置管理',
       icon: 'el-icon-setting',
       hidden: false
     }

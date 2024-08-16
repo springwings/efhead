@@ -13,7 +13,11 @@
           </tr>
           <tr>
             <td class="key">节点类型</td>
-            <td class="string">{{ result.NODE_TYPE }}</td>
+            <td >{{ result.NODE_TYPE }}</td>
+          </tr>
+          <tr>
+          <td class="key">系统版本</td>
+            <td >{{ result.VERSION }}</td>
           </tr>
           <tr>
             <td class="key">实例数</td>
@@ -21,7 +25,7 @@
           </tr>
           <tr>
             <td class="key">集群状态</td>
-            <td class="string">{{ result.STATUS }}</td>
+            <td :class="result.STATUS === 'normal' ? 'success' : 'string'">{{ result.STATUS }}</td>
           </tr>
           <tr>
             <td class="key">线程使用率</td>
@@ -36,10 +40,6 @@
           <tr>
             <td class="key">开启批量写</td>
             <td class="boolean">{{ result.WRITE_BATCH }}</td>
-          </tr>
-          <tr>
-            <td class="key">系统版本</td>
-            <td class="string">{{ result.VERSION }}</td>
           </tr>
           <tr>
             <td class="key">系统线程配置数</td>
@@ -71,7 +71,7 @@
           </tr>
           <tr>
             <td class="key">开启服务级别</td>
-            <td class="number">
+            <td>
                 <p v-if="(result.SERVICE_LEVEL&1)>0">searcher service</p>
                 <p v-if="(result.SERVICE_LEVEL&2)>0">writer service</p>
                 <p v-if="(result.SERVICE_LEVEL&4)>0">http-reader service</p>
@@ -81,9 +81,9 @@
           <tr>
             <td class="key">集群管理</td>
               <td class="number">
-                <a v-on:click="handleNode(result.NODE_ID,'restartNode')" type="button" class="el-button el-button--success">重启节点</a>
-                <a v-on:click="handleCluster('restartCluster')" type="button" class="el-button el-button--primary">重启集群</a>
-                <a v-on:click="handleCluster('stopCluster')" type="button" class="el-button el-button--info">停止集群</a>
+                <button v-on:click="handleNode(result.NODE_ID,'restartNode')" class="el-button el-button--success" :disabled="isProcessing || result.STATUS !== 'normal'">重启节点</button>
+                <button v-on:click="handleCluster('restartCluster')" class="el-button el-button--primary" :disabled="isProcessing || result.STATUS !== 'normal'">重启集群</button>
+                <button v-on:click="handleCluster('stopCluster')" class="el-button el-button--info" :disabled="isProcessing || result.STATUS !== 'normal'">停止集群</button>
               </td>
           </tr>
           <tr v-if="this.result.SLAVES && Object.keys(this.result.SLAVES).length > 0" style="background:rgb(221 241 240);text-align:center;font-weight:bold"><td colspan="2" ><i class="el-icon-set-up"></i> 集群从节点</td></tr>
@@ -93,6 +93,17 @@
                   <tr>
                     <td class="key2" style="width:120px">节点ID</td>
                     <td class="number" style="width:90%">{{ obj.NODE_ID }}</td>
+                  </tr>
+                  <tr>
+                  <td class="key2">系统版本</td>
+                    <td>
+                      <span v-if="obj.VERSION === result.VERSION">
+                        {{ obj.VERSION }}
+                      </span>
+                      <span class="string" v-else>
+                        {{ obj.VERSION }} [版本不一致]
+                      </span>
+                    </td>
                   </tr>
                   <tr>
                     <td class="key2" style="width:120px">实例数</td>
@@ -134,10 +145,12 @@
                       {{ obj.SYS_THREAD_POOL_SIZE }}
                     </td>
                   </tr>
-                  <tr>
-                    <td class="key2">系统版本</td>
-                    <td class="string">{{ obj.VERSION }}</td>
-                  </tr>
+                    <tr>
+                    <td class="key2">系统高危错误</td>
+                      <td class="number">
+                      {{ obj.ERROR_TERMINATION }}
+                    </td>
+                    </tr>
                   <tr>
                     <td class="key2">开启批量写</td>
                     <td class="boolean">{{ obj.WRITE_BATCH }}</td>
@@ -145,8 +158,8 @@
                   <tr>
                      <td class="key2">节点管理</td>
                      <td class="boolean">
-                      <a type="button" v-on:click="handleNode(obj.NODE_ID,'restartNode')" class="el-button el-button--success is-round">重启</a>
-                      <a type="button" v-on:click="handleNode(obj.NODE_ID,'stopNode')" class="el-button el-button--info is-round">停止</a>
+                      <button v-on:click="handleNode(obj.NODE_ID,'restartNode')" class="el-button el-button--success is-round" :disabled="isProcessing || result.STATUS !== 'normal'">重启</button>
+                      <button v-on:click="handleNode(obj.NODE_ID,'stopNode')" class="el-button el-button--info is-round" :disabled="isProcessing || result.STATUS !== 'normal'">停止</button>
                     </td>
                   </tr>
                 </td>
@@ -164,6 +177,7 @@ import basicApi from '@/request/api/basic'
 export default {
   data () {
     return {
+      isProcessing: false,
       result: null
     }
   },
@@ -181,11 +195,14 @@ export default {
       this.$confirm('节点是否执行操作'+acmethod+'？', '提示', {
         type: 'warning'
       }).then(() => {
+        this.isProcessing = true;
         basicApi.efm_doaction({
           ac:acmethod,
           node_id:node_id
         }).then(res => {
           this.$process_state(this,"节点重启成功！",res)
+          this.isProcessing = false;
+          window.location.reload();
         })
       })
     },
@@ -193,10 +210,13 @@ export default {
       this.$confirm('集群是否执行操作'+acmethod+'？', '提示', {
         type: 'warning'
       }).then(() => {
+        this.isProcessing = true;
         basicApi.efm_doaction({
           ac:acmethod
         }).then(res => {
           this.$process_state(this,"集群重启成功！",res)
+          this.isProcessing = false;
+          window.location.reload();
         })
       })
     },
@@ -238,6 +258,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .success{
+  color: #67C23A;
+}
 .clusterStatus {
   border-collapse: collapse;
   width: 100%;
