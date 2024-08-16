@@ -422,8 +422,12 @@ export default {
           data = data.concat(item)
         })
         this.page.total = data.length
-        this.tableData = Object.assign([], data)
-        this.originData = Object.assign([], data)
+        this.tableData = data.sort((a, b) => {
+          return a.Instance.localeCompare(b.Instance);
+        });
+        this.originData = data.sort((a, b) => {
+          return a.Instance.localeCompare(b.Instance);
+        });
         this.loading = false
       })
     },
