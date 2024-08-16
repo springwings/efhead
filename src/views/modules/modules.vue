@@ -217,7 +217,7 @@ export default {
         }).finally(() => {
           setTimeout(() => {
             window.location.reload();
-          }, 500);
+          }, 2000);
         })
       })
     },handleConfig (row) {
