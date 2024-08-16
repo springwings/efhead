@@ -186,9 +186,7 @@ export default {
               instance: row.Instance
             }).then(res => {
               this.$process_state(this,'重置 '+row.Instance+' 断路器成功！',res)
-              setTimeout(() => {
-                window.location.reload();
-              }, 800);
+              this.getTaskList()
             })
           })
         },
@@ -274,9 +272,7 @@ export default {
             this.loading = false;
             this.buttonDisabled = false;
             this.$process_state(this,'删除 '+ row.Instance+' 实例任务成功!',res)
-            setTimeout(() => {
-              window.location.reload();
-            }, 800);
+            this.getTaskList()
             })
           })
         },
@@ -308,9 +304,7 @@ export default {
         this.loading = false;
         this.buttonDisabled = false;
         this.$process_state(this,'实例 '+ row.Instance+' 重载成功!',res)
-        setTimeout(() => {
-          window.location.reload();
-        }, 800);
+        this.getTaskList()
        })
       })
     },

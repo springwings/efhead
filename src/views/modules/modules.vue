@@ -214,10 +214,7 @@ export default {
         delete data.writesource;
         basicApi.efm_doaction_post(data).then(res => {
           this.$process_state(this,'添加 '+data.row.name+' 实例任务成功!',res)
-        }).finally(() => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000);
+          this.getModuleList()
         })
       })
     },handleConfig (row) {

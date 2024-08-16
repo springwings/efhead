@@ -216,7 +216,7 @@ export default {
         }).then(res => {
           this.$process_state(this,"集群重启成功！",res)
           this.isProcessing = false;
-          window.location.reload();
+          this.getStatus()
         })
       })
     },
