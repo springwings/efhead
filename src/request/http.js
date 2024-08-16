@@ -5,10 +5,11 @@ import { Message } from 'element-ui'
 // 弹出框报错
 const messageErr = function (srt) {
   Message({
+    title: '失败',
     message: srt || '未知错误',
     type: 'error',
     showClose: true,
-    duration: 15000
+    duration: 6000,
   })
 }
 
@@ -36,10 +37,8 @@ service.interceptors.response.use(
     let data = response.data
     if (data.status !== 0) {
       messageErr(data.info)
-      return Promise.reject(data)
-    } else {
-      return Promise.resolve(data)
     }
+    return Promise.resolve(data)
   },
   error => {
     let response = error.response

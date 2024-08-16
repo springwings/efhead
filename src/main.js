@@ -20,14 +20,6 @@ Vue.prototype.$process_state = (obj,message,res) => {
       type: 'success',
       iconClass: 'el-icon-check'
     });
-  } else {
-    obj.$notify({
-      title: '失败',
-      message: res.info || '失败，请重试',
-      duration: 6000,
-      type: 'error',
-      iconClass: 'el-icon-error'
-    });
   }
 }
 
