@@ -37,9 +37,10 @@
 </el-row>
   <el-row :gutter="20">
    <el-col :span="8">
-    <div class="grid-content" style="min-height:300px;padding:0 15px"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px 0;"><i class="el-icon-message-solid"></i> 集群告警信息监控</p>
+    <div class="grid-content" style="min-height:300px;padding:0 15px"><p style="min-height:25px;font-weight:bold;font-size:18px;padding:10px 0;">
+<i class="el-icon-message-solid"></i> 集群告警信息监控 <el-link @click="clearlog" style="float:right;" type="success">重置</el-link></p>
       <div class="el-table__header-wrapper">
-      <table  class="waring_table">
+      <table class="waring_table">
       <tbody>
         <tr><td class="el-title">L1级错误：系统警告类消息</td><td>
   <label>{{summary_data.error_ignore}}</label>
@@ -117,6 +118,13 @@ export default {
   //  clearInterval(this.interval_ins1);
   },
   methods: {
+    clearlog(){
+      basicApi.efm_doaction({
+        ac: 'clearSystemWarning'
+      }).then(res => {
+        this.$process_state(this,'重置成功!',res)
+      })
+    },
     drawHistory(chart,reader,writer,computer,dateinfo){
       var option;
       var dayString = `三端最近 ${dateinfo.length}天数据统计`
