@@ -5,7 +5,7 @@
     </div>
     <div class="flex flex-right">
     <el-select style="width: 300px" @change="handleFile" placeholder="请选择配置文件,默认config.properties" v-model="fname" clearable>
-       <el-option v-for="fname in configfiles"  :key="fname"  :label="fname"  :value="fname"></el-option>
+       <el-option v-for="fname in configfiles"  :key="fname.key"  :label="fname.key"  :value="fname.value"></el-option>
     </el-select>
         <el-button  @click="handleEdit" style="width:150px" type="primary">更新配置</el-button>
     </div>
@@ -23,7 +23,9 @@ import { Base64 } from '@/utils/Base64'
 export default {
   data () {
     return {
-      configfiles: ["config.properties","log4j.properties","mail.properties"],
+      configfiles: [{"key":"系统配置","value":"config.properties"},
+        {"key":"日志配置","value":"log4j.properties"},
+        {"key":"邮件配置","value":"mail.properties"}],
       fname: "config.properties",
       code: '',
       cmOptions: {
@@ -71,7 +73,7 @@ export default {
         basicApi.efm_doaction_post({
           ac: 'updatePropertyFile',
           fname: this.fname,
-          content: this.code
+          content: base64.encode(this.code)
         }).then(res => {
           this.$process_state(this,'保存 '+this.fname+' 配置成功！',res)
         })
