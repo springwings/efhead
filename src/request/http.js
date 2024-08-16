@@ -37,8 +37,12 @@ service.interceptors.response.use(
     let data = response.data
     if (data.status !== 0) {
       messageErr(data.info)
+      setTimeout(() => {
+        return Promise.resolve(data)
+      }, 5000);
+    }else {
+      return Promise.resolve(data)
     }
-    return Promise.resolve(data)
   },
   error => {
     let response = error.response

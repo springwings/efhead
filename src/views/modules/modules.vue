@@ -30,7 +30,7 @@
             <el-button title="启用实例" v-if="row.enable === false" type="primary" @click.native="handleOpen(row)">启用</el-button>
             <el-button title="停止实例" v-if="row.enable === true" type="warning" @click.native="handleClose(row)">停止</el-button>
             <el-button title="修改模块配置" type="primary" @click.native="handleConfig(row)">修改</el-button>
-            <el-button title="卸载模块" type="danger" @click.native="unload(row)">卸载</el-button>
+            <el-button title="卸载模块" :disabled="row.enable === true" type="danger" @click.native="unload(row)">卸载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -45,9 +45,6 @@
           background>
         </el-pagination>
       </div>
-
-
-
 
     <el-dialog :top="dialogTop"  :title="dialogTitle" :visible.sync="visible" :close-on-click-modal="false">
         <el-form ref="instanceForm" label-width="120px" :model="formData" :rules="formRules">
@@ -175,6 +172,7 @@ export default {
     },
     handleUpdateModule(){
       let base64 = new Base64()
+      this.loading = true;
       basicApi.efm_doaction_post({
         ac: 'updateInstanceXml',
         content: base64.encode(this.edit_instance.code),
@@ -182,6 +180,7 @@ export default {
       }).then(res => {
         this.edit_instance = {}
         this.showXML = false
+        this.loading = false;
         this.$process_state(this,'保存 '+ this.edit_instance.instance+' 模块配置成功!',res)
       })
     },
@@ -205,7 +204,6 @@ export default {
     handleSubmit () {
       this.$refs.instanceForm.validate(value => {
         if (!value) return
-        this.loading = true
         let base64 = new Base64()
         let data = Object.assign({
           ac: 'startModule'
@@ -215,10 +213,11 @@ export default {
         delete data.readsource;
         delete data.writesource;
         basicApi.efm_doaction_post(data).then(res => {
-          this.$process_state(this,'添加 '+data.row.name+' 任务成功!',res)
+          this.$process_state(this,'添加 '+data.row.name+' 实例任务成功!',res)
         }).finally(() => {
-          this.loading = false
-          this.getModuleList ()
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         })
       })
     },handleConfig (row) {
@@ -227,8 +226,7 @@ export default {
         ac: 'getInstanceXml',
         instance: row.name
       }).then(res => {
-        let data = res.response.datas
-        this.edit_instance.code = typeof data === 'string' ? data : ''
+        this.edit_instance.code = res.response.datas
         this.edit_instance.instance = row.name
         this.showXML = true
       })
@@ -243,10 +241,10 @@ export default {
         ac: 'unloadModule',
         module: row.name
       }).then(res => {
-        this.loading = false;
-        this.buttonDisabled = false;
         this.$process_state(this,'卸载 '+ row.name+' 模块成功!',res)
         this.getModuleList ()
+        this.loading = false;
+        this.buttonDisabled = false;
       })
     })
   },
@@ -275,6 +273,14 @@ export default {
             })
           }
         }
+        this.formData.readsource = this.formData.readsource.sort((a, b) => {
+          return a.label.localeCompare(b.label);
+        });
+
+        this.formData.writesource = this.formData.writesource.sort((a, b) => {
+          return a.label.localeCompare(b.label);
+        });
+
         this.visible = true
       })
     },
@@ -299,8 +305,11 @@ export default {
           data = data.concat(item)
         })
         this.page.total = data.length
-        this.tableData = Object.assign([], data)
-        this.originData = Object.assign([], data)
+        const sortedData = data.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        this.tableData = Object.assign([], sortedData)
+        this.originData = Object.assign([], sortedData)
         this.loading = false
       })
     }
