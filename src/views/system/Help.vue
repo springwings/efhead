@@ -4,7 +4,7 @@
   常见问题
   </div>
   <div>
-    <codemirror v-model="datas" :options="cmOptions" style="margin-top:10px;"></codemirror>
+    <codemirror v-model="datas" :options="cmOptions" style="margin-top:10px;border:solid 1px #ccc"></codemirror>
   </div>
   </el-card >
   </template>
@@ -45,5 +45,13 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
   height:600px;
+  line-height: 28px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 0, 0.1) 28px,
+    rgba(0, 0, 0, 0.1) 29px
+);
 }
 </style>

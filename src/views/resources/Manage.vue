@@ -6,8 +6,8 @@
   <div class="flex flex-right">
     <el-button @click="handleEdit" style="width:150px" type="primary">更新资源配置</el-button>
   </div>
-  <div style="border:solid 1px #ccc;margin-top:20px;">
-    <codemirror v-model="code" :options="cmOptions" style="margin-top:10px;"></codemirror>
+  <div >
+    <codemirror v-model="code" :options="cmOptions" style="margin-top:10px;border:solid 1px #ccc;"></codemirror>
   </div>
   </el-card >
 </template>
@@ -61,5 +61,13 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
   height: 600px;
+  line-height: 28px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 0, 0.1) 28px,
+    rgba(0, 0, 0, 0.1) 29px
+);
 }
 </style>

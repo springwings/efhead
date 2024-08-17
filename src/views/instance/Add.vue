@@ -17,7 +17,7 @@
         <el-button type="primary" :loading="loading" @click="handleSubmit" class="task_add">添加实例</el-button>
       </el-form-item>
       <form label="Content" prop="content">
-        <codemirror v-model="formData.content" :options="cmOptions" style="margin-top:10px;"></codemirror>
+        <codemirror v-model="formData.content" :options="cmOptions" ></codemirror>
       </form>
   </el-form-item>
   </el-form>
@@ -125,6 +125,14 @@ export default {
 ::v-deep .CodeMirror {
   height: 550px;
   border: 1px solid #eee;
+  line-height: 28px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 0, 0.1) 28px,
+    rgba(0, 0, 0, 0.1) 29px
+);
 }
 .task_label{
   font-weight: bold;
