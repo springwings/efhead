@@ -77,6 +77,7 @@ export default {
       })
     },
     handleError () {
+      this.code = "";
       this.autofresh = false;
       this.track_type = "节点错误日志"
       this.stopLogPolling();
@@ -105,6 +106,7 @@ export default {
     startLogPolling() {
       this.track_type = "节点实时日志"
       this.autofresh = true;
+      this.code = "";
       this.stopLogPolling();
       this.intervalId = setInterval(() => {
         this.handleLogs();
