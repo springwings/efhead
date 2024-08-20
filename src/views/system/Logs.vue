@@ -9,7 +9,8 @@
         <el-option v-for="ip in hosts"  :key="ip"  :label="ip"  :value="ip"></el-option>
      </el-select>
    <el-button  @click="startLogPolling" style="width:150px" type="primary">节点实时日志</el-button>
-  <el-button  @click="handleError" style="width:150px" type="info">节点错误日志</el-button>
+    <el-button  @click="handleError" style="width:150px" type="info">节点错误日志</el-button>
+    <el-button  @click="clearlog" style="width:150px" type="warning">清理节点日志</el-button>
   </div>
   </div>
   <div style="border:solid 1px #ccc;margin-top:20px;padding-bottom:10px;position: relative;background: #f3f3f3;">
@@ -52,6 +53,7 @@ export default {
     return {
       log_lines: 300,
       code: '',
+      errorlogfile: false,
       track_type: "节点实时日志",
       hosts:[],
       ip: '',
@@ -76,8 +78,25 @@ export default {
         this.hosts = data
       })
     },
+    clearlog () {
+      this.$confirm('是否清理 '+ this.ip+' 节点日志？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.loading = true;
+        this.code = "";
+        basicApi.efm_doaction({
+            ac: 'clearLog',
+              errorlogfile: this.errorlogfile,
+              ip: this.ip,
+          }).then(res => {
+          this.loading = false;
+          this.$process_state(this,'清理 '+ this.ip+' 节点日志成功!',res)
+          })
+        })
+        },
     handleError () {
       this.code = "";
+      this.errorlogfile = true;
       this.autofresh = false;
       this.track_type = "节点错误日志"
       this.stopLogPolling();
@@ -104,9 +123,9 @@ export default {
       })
     },
     startLogPolling() {
+      this.errorlogfile = false;
       this.track_type = "节点实时日志"
       this.autofresh = true;
-      this.code = "";
       this.stopLogPolling();
       this.intervalId = setInterval(() => {
         this.handleLogs();
