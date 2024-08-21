@@ -28,17 +28,20 @@ import 'codemirror/theme/eclipse.css'
 CodeMirror.defineMode('custom', function() {
   return {
     token: function(stream, state) {
-      if (stream.match(/(?:\b|\W)(INFO)(?:\b|\W)/i)) {
+      if (stream.match(/(?:\b|\W)(INFO|alias)(?:\b|\W)/i)) {
         return 'info';
       }
-      if (stream.match(/(?:\b|\W)(SUCCESS)(?:\b|\W)/i)) {
+      if (stream.match(/(?:\b|\W)(SUCCESS|true)(?:\b|\W)/i)) {
         return 'success';
       }
-      if (stream.match(/(?:\b|\W)(WARN|warning)(?:\b|\W)/i)) {
+      if (stream.match(/(?:\b|\W)(WARN|warning|false)(?:\b|\W)/i)) {
         return 'warn';
       }
       if (stream.match(/(?:\b|\W)(ERROR|efexception|exception|failed)(?:\b|\W)/i)) {
         return 'error';
+      }
+      if (stream.match(/(?:\b|\W)(None)(?:\b|\W)/i)) {
+        return 'unexpect';
       }
       stream.next();
       return null;
@@ -169,18 +172,21 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .CodeMirror {
-  height: 600px;background: #f9fff3;
+  height: 600px;background: #ddffe5;
 }
 ::v-deep .CodeMirror .cm-success {
-  color: #2fb300;
+  color: #18ed93;
 }
 ::v-deep .CodeMirror .cm-info {
-  color: #3372b5;
+  color: #54d5ed;
 }
 ::v-deep .CodeMirror .cm-warn {
-  color: #d7a100;
+  color: #dedc12;
 }
 ::v-deep .CodeMirror .cm-error {
-  color: red;
+  color: #ff6060;
+}
+::v-deep .CodeMirror .cm-unexpect {
+  color: #ff4dff;
 }
 </style>
