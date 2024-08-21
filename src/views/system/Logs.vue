@@ -28,19 +28,22 @@ import 'codemirror/theme/eclipse.css'
 CodeMirror.defineMode('custom', function() {
   return {
     token: function(stream, state) {
-      if (stream.match(/(?:\b|\W)(INFO|alias)(?:\b|\W)/i)) {
+      if (stream.match(/\b(INFO|alias)\b/i)) {
         return 'info';
       }
-      if (stream.match(/(?:\b|\W)(SUCCESS|true)(?:\b|\W)/i)) {
+      if (stream.match(/\b(SUCCESS|true)\b/i)) {
         return 'success';
       }
-      if (stream.match(/(?:\b|\W)(WARN|warning|false)(?:\b|\W)/i)) {
+      if (stream.match(/(?:\b|\W|\[)(WARN|warning|false)(?:\b|\W|\])/i)) {
         return 'warn';
       }
-      if (stream.match(/(?:\b|\W)(ERROR|efexception|exception|failed)(?:\b|\W)/i)) {
+      if (stream.match(/\b(ERROR|efexception|exception|failed|no|denied|refuse)\b/i)) {
         return 'error';
       }
-      if (stream.match(/(?:\b|\W)(None)(?:\b|\W)/i)) {
+      if (stream.match(/(?:\b|\W|\[)(None)(?:\b|\W|\])/i)) {
+        return 'unexpect';
+      }
+      if (stream.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/)) {
         return 'unexpect';
       }
       stream.next();
