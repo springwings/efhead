@@ -9,8 +9,8 @@
         <el-option v-for="ip in hosts"  :key="ip"  :label="ip"  :value="ip"></el-option>
      </el-select>
    <el-button  @click="startLogPolling" style="width:150px" type="primary">节点实时日志</el-button>
-    <el-button  @click="handleError" style="width:150px" type="info">节点错误日志</el-button>
-    <el-button  @click="clearlog" style="width:150px" type="warning">清理节点日志</el-button>
+    <el-button  @click="handleError" style="width:150px" type="warning">节点错误日志</el-button>
+    <el-link  @click="clearlog" style="width:150px" type="el-link--danger">清理节点日志</el-link>
   </div>
   </div>
   <div style="border:solid 1px #ccc;margin-top:20px;padding-bottom:10px;position: relative;background: #f3f3f3;">
@@ -79,7 +79,7 @@ export default {
       })
     },
     clearlog () {
-      this.$confirm('是否清理 '+ this.ip+' 节点日志？', '提示', {
+      this.$confirm('是否清理 '+ this.ip+' '+ this.track_type, '提示', {
         type: 'warning'
       }).then(() => {
         this.loading = true;
@@ -104,6 +104,9 @@ export default {
         ac: 'getErrorLog'
       }).then(res => {
         this.code = res.response.datas
+        if(this.code == ""){
+          this.code = "没有错误日志！"
+        }
       })
     },
     handleLogs () {
@@ -113,11 +116,14 @@ export default {
         ip:this.ip,
       }).then(res => {
         this.code = res.response.datas
+        if(this.code == ""){
+          this.code = "没有节点实时日志！"
+        }
         this.$nextTick(() => {
           const cmInstance = this.$refs.codeMirror.codemirror;
           if (cmInstance) {
             const scrollInfo = cmInstance.getScrollInfo();
-            cmInstance.scrollTo(null, scrollInfo.height);  // 将滚动条设置到内容的最底部
+            cmInstance.scrollTo(null, scrollInfo.height);
           }
         });
       })
