@@ -64,6 +64,7 @@ export default {
       hosts:[],
       ip: '',
       autofresh: true,
+      loading: true,
       cmOptions: {
         tabSize: 4,
         mode: 'text/x-custom',
@@ -116,11 +117,13 @@ export default {
       })
     },
     handleLogs () {
+      this.loading = true;
       basicApi.efm_doaction({
         ac: 'getSystemLog',
         lines:this.log_lines,
         ip:this.ip,
       }).then(res => {
+        this.loading = false;
         this.code = res.response.datas
         if(this.code == ""){
           this.code = "没有节点实时日志！"
@@ -139,6 +142,7 @@ export default {
       this.track_type = "节点实时日志"
       this.autofresh = true;
       this.stopLogPolling();
+      this.loading = false;
       this.intervalId = setInterval(() => {
         this.handleLogs();
       }, 800);
