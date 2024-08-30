@@ -102,7 +102,7 @@ export default {
         })
         },
     handleError () {
-      this.code = "";
+      this.code = "日志加载中......"
       this.errorlogfile = true;
       this.autofresh = false;
       this.track_type = "节点错误日志"
@@ -118,6 +118,7 @@ export default {
     },
     handleLogs () {
       this.loading = true;
+      this.code = "日志加载中......"
       basicApi.efm_doaction({
         ac: 'getSystemLog',
         lines:this.log_lines,
