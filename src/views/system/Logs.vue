@@ -61,6 +61,7 @@ export default {
       code: '日志加载中......',
       errorlogfile: false,
       track_type: "节点实时日志",
+      isHandlingLogs: false,
       hosts:[],
       ip: '',
       autofresh: true,
@@ -117,6 +118,7 @@ export default {
       })
     },
     handleLogs () {
+      this.isHandlingLogs = true;
       this.loading = true;
       basicApi.efm_doaction({
         ac: 'getSystemLog',
@@ -128,6 +130,7 @@ export default {
         if(this.code == ""){
           this.code = "没有节点实时日志！"
         }
+        this.isHandlingLogs = false;
         this.$nextTick(() => {
           const cmInstance = this.$refs.codeMirror.codemirror;
           if (cmInstance) {
@@ -138,13 +141,16 @@ export default {
       })
     },
     startLogPolling() {
+      this.code = "日志加载中......"
       this.errorlogfile = false;
       this.track_type = "节点实时日志"
       this.autofresh = true;
       this.stopLogPolling();
       this.loading = false;
       this.intervalId = setInterval(() => {
-        this.handleLogs();
+        if (!this.isHandlingLogs) {
+          this.handleLogs();
+        }
       }, 800);
     },
    stopLogPolling() {
