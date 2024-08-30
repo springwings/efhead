@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       log_lines: 300,
-      code: '',
+      code: '日志加载中......',
       errorlogfile: false,
       track_type: "节点实时日志",
       hosts:[],
@@ -118,7 +118,6 @@ export default {
     },
     handleLogs () {
       this.loading = true;
-      this.code = "日志加载中......"
       basicApi.efm_doaction({
         ac: 'getSystemLog',
         lines:this.log_lines,
