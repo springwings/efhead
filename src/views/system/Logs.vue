@@ -4,10 +4,11 @@
     <router-link to="/systemLogs">日志跟踪</router-link> > <label>{{track_type}}</label>
   </div>
   <div class="flex flex-right">
-    <el-input style="width: 100px" placeholder="返回日志行数" v-model="log_lines" clearable :maxlength="12"></el-input>
-     <el-select style="width: 300px" placeholder="请选择节点IP,默认主节点" v-model="ip" clearable>
-        <el-option v-for="ip in hosts"  :key="ip"  :label="ip"  :value="ip"></el-option>
+     <el-input style="width: 80px" placeholder="返回日志行数" v-model="log_lines" clearable :maxlength="12"></el-input>
+     <el-select style="width:200px" placeholder="请选择节点IP,默认主节点" v-model="ip" clearable>
+     <el-option v-for="ip in hosts"  :key="ip"  :label="ip"  :value="ip"></el-option>
      </el-select>
+  <el-input style="width: 200px" placeholder="关键词过滤" v-model="log_kw" clearable :maxlength="12"></el-input>
    <el-button  @click="startLogPolling" style="width:150px" type="primary">节点实时日志</el-button>
     <el-button  @click="handleError" style="width:150px" type="warning">节点错误日志</el-button>
     <el-link  @click="clearlog" style="width:150px" type="el-link--danger">清理节点日志</el-link>
@@ -58,6 +59,7 @@ export default {
   data () {
     return {
       log_lines: 300,
+      log_kw: '',
       code: '日志加载中......',
       errorlogfile: false,
       track_type: "节点实时日志",
@@ -109,7 +111,8 @@ export default {
       this.track_type = "节点错误日志"
       this.stopLogPolling();
       basicApi.efm_doaction({
-        ac: 'getErrorLog'
+        ac: 'getErrorLog',
+        kw: this.log_kw,
       }).then(res => {
         this.code = res.response.datas
         if(this.code == ""){
@@ -119,18 +122,17 @@ export default {
     },
     handleLogs () {
       this.isHandlingLogs = true;
-      this.loading = true;
       basicApi.efm_doaction({
         ac: 'getSystemLog',
         lines:this.log_lines,
         ip:this.ip,
+        kw: this.log_kw,
       }).then(res => {
-        this.loading = false;
+        this.isHandlingLogs = false;
         this.code = res.response.datas
         if(this.code == ""){
           this.code = "没有节点实时日志！"
         }
-        this.isHandlingLogs = false;
         this.$nextTick(() => {
           const cmInstance = this.$refs.codeMirror.codemirror;
           if (cmInstance) {
@@ -141,14 +143,13 @@ export default {
       })
     },
     startLogPolling() {
-      this.code = "日志加载中......"
       this.errorlogfile = false;
       this.track_type = "节点实时日志"
       this.autofresh = true;
       this.stopLogPolling();
       this.loading = false;
       this.intervalId = setInterval(() => {
-        if (!this.isHandlingLogs) {
+        if (this.isHandlingLogs == false) {
           this.handleLogs();
         }
       }, 800);
