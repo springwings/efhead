@@ -128,7 +128,6 @@ export default {
         ip:this.ip,
         kw: this.log_kw,
       }).then(res => {
-        this.isHandlingLogs = false;
         this.code = res.response.datas
         if(this.code == ""){
           this.code = "没有节点实时日志！"
@@ -140,6 +139,7 @@ export default {
             cmInstance.scrollTo(null, scrollInfo.height);
           }
         });
+        this.isHandlingLogs = false;
       })
     },
     startLogPolling() {
