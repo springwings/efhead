@@ -4,7 +4,7 @@
     <router-link to="/systemLogs">日志跟踪</router-link> > <label>{{track_type}}</label>
   </div>
   <div class="flex flex-right">
-     <el-input style="width: 80px" placeholder="返回日志行数" v-model="log_lines" clearable :maxlength="12"></el-input>
+     <el-input style="width: 80px" placeholder="返回行数" v-model="log_lines" clearable :maxlength="12"></el-input>
      <el-select style="width:200px" placeholder="请选择节点IP,默认主节点" v-model="ip" clearable>
      <el-option v-for="ip in hosts"  :key="ip"  :label="ip"  :value="ip"></el-option>
      </el-select>
